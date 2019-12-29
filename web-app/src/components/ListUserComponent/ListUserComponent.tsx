@@ -4,6 +4,8 @@ import { User } from "../../model/User";
 import { Status } from "../../model/Status";
 
 import "./list-user-component.css";
+import { AppContextHelpers as AppContext } from "../../helpers/AppContextHelpers";
+import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
 
 type IProps = {
 	data : User
@@ -30,8 +32,22 @@ export default class ListUserComponent extends Component<IProps> {
 		}
 	};
 
+	selectUser = async () => {
+		// TODO: work with backend
+		Profile.profileContext
+		&&
+		AppContext.changeRoom({
+			id: "1",
+			users: [this.props.data, Profile.profileContext.profile],
+			messages : [],
+			images : 0,
+			documents : 0,
+			group : false
+		});
+	};
+
 	render = () => (
-		<div className="list-user">
+		<div className="list-user" onClick={this.selectUser}>
 			<div className="list-user-background">
 				<div className="list-user-focus"/>
 				<div className="list-user-info">
@@ -39,7 +55,9 @@ export default class ListUserComponent extends Component<IProps> {
 						<img src="https://images-na.ssl-images-amazon.com/images/I/31qu4ixHZ3L._SY355_.jpg"/>
 					</div>
 					<div className="list-user-nick">
-						<span style={{ color : this.state.selected ? "white" : "#a9a9a9" }}>Loli Master</span>
+						<span style={{ color: this.state.selected ? "white" : "#a9a9a9" }}>
+							{this.props.data.nick}
+						</span>
 					</div>
 					<div className="list-user-status">
 						<div style={{ background : this.statusColor() }}/>

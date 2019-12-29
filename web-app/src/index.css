@@ -2,6 +2,11 @@
 	transition: 0.2s;
 }
 
+body, html {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
 body, html, #root {
 	height: 100%;
 	width: 100%;
@@ -21,13 +26,24 @@ code {
     monospace;
 }
 
-button {
+button, input {
 	outline: none;
 	border: none;
 }
 
 button:hover {
 	cursor: pointer;
+}
+
+i {
+  font-size: 20px;
+}
+
+input {
+  color: black;
+  background: white;
+  padding: 5px;
+  font-size: 15px;
 }
 
 .main-container {
