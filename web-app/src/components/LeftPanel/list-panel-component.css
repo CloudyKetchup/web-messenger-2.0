@@ -1,0 +1,40 @@
+.left-panel {
+	width: 250px;
+	height: 100%;
+	background: #323232;
+}
+
+.people-pane {
+	padding: 5px;
+	display: grid;
+	grid-auto-rows: 50px;
+	overflow-y: auto;
+	height: calc(100% - 70px);
+}
+
+.left-panel-control-buttons {
+	margin-top: auto;
+	height: 50px;
+	padding: 5px;
+	padding-left: 10px;
+}
+
+.left-panel-control-buttons button {
+	background: #181818;
+	border-radius: 100px;
+	height: 40px;
+	width: 40px;
+	margin-top: -7px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+.left-panel-control-buttons > div {
+	margin-top: 10px;
+}
+
+.left-panel-control-buttons button > i {
+	line-height: 25px;
+	font-size: 20px;
+	color: #35CE8D;
+}

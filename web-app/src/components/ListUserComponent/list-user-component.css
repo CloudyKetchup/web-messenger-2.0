@@ -1,0 +1,60 @@
+.list-user:hover {
+	cursor: pointer;
+}
+
+.list-user-background {
+	height: 100%;
+}
+
+.list-user-focus {
+	float: left;
+	height: 100%;
+	width: 0px;
+	background: #EA4343;
+}
+
+.list-user-info {
+	display: flex;
+	height: 100%;
+	width: calc(100% - 3px);
+	margin-left: auto;
+}
+
+.list-user-info > div {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.list-user-photo {
+	margin-top: 7px;
+	height: 35px;
+	width: 35px;
+}
+
+.list-user-photo img {
+	border-radius: 100px;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.list-user-nick {
+	line-height: 50px;
+	width: 58%;
+}
+
+.list-user-nick > span {
+	margin-left: 5px;
+}
+
+.list-user-status {
+	padding-top: 20px;
+	margin-left: auto;
+	width: 40px;
+}
+
+.list-user-status > div {
+	border-radius: 100px;
+	margin: auto;
+	height: 10px;
+	width: 10px;
+}
