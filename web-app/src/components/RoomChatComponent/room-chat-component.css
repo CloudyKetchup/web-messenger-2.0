@@ -51,3 +51,10 @@
   color: #6C6EA0;
   width: 70px;
 }
+
+.chat-messages-container {
+  height: 100%;
+  grid-gap: 10px;
+  display: grid;
+  grid-auto-rows: minmax(auto, 40px);
+}

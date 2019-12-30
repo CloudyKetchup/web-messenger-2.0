@@ -1,0 +1,12 @@
+.message-div {
+  background: #181818;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 50%;
+  display: flex;
+}

@@ -7,29 +7,37 @@ import { Message } from "../../model/Message";
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
 import { AppContextHelpers as AppContext } from "../../helpers/AppContextHelpers";
 
+import MessageComponent from "../MessageComponent/MessageComponent";
+
 import "./room-chat-component.css";
 
-type IProps = {
-	data : Room
-};
+type IProps = { data : Room };
 
 type IState = {
 	choosenImages : FileList | null
 	user 					: User | null
 	typing 				: boolean
+	messages			: Message[]
 };
 
-export default class RoomChatComponent extends Component<IProps> {
+export default class RoomChatComponent extends Component<IProps, IState> {
 	state : IState = {
 		choosenImages : null,
 		user 					: null,
-		typing 				: true
+		typing 				: true,
+		messages			: []
 	};
 
 	componentDidMount = async () => {
 		const user = this.props.data.users.filter(u => u.id !== Profile.profileContext?.profile.id)[0];
 
-		user && this.setState({ user : user });
+		if (AppContext.context && AppContext.context.roomSelected) {
+			user
+			?
+			this.setState({ user: user, messages: AppContext.context.roomSelected.messages })
+			:
+			this.setState({ messages: AppContext.context.roomSelected.messages });
+		}
 	};
 
 	chooseImages = async () => {
@@ -64,14 +72,10 @@ export default class RoomChatComponent extends Component<IProps> {
 						color : "grey"
 					}}>typing...</span>
 				}
-				<div>
-					<input
-						placeholder="search..."
-					/>
-				</div>
 			</div>
 			<div className="room-chat-body">
 				<div className="chat-messages-container">
+					{this.state.messages.map(m => <MessageComponent data={m}/>)}
 				</div>
 			</div>
 			<div className="room-chat-footer">
