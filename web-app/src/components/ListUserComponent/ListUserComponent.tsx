@@ -3,9 +3,12 @@ import React, { Component } from "react";
 import { User } from "../../model/User";
 import { Status } from "../../model/Status";
 
-import "./list-user-component.css";
 import { AppContextHelpers as AppContext } from "../../helpers/AppContextHelpers";
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
+
+import { Room } from "../../model/Room";
+
+import "./list-user-component.css";
 
 type IProps = {
 	data : User
@@ -15,10 +18,14 @@ type IState = {
 	selected : boolean
 };
 
+let i = 0;
+
 export default class ListUserComponent extends Component<IProps> {
 	state : IState = {
 		selected : false
 	};
+
+	room : Room | undefined;
 
 	statusColor = () : string => {
 		switch (this.props.data.status) {
@@ -33,17 +40,28 @@ export default class ListUserComponent extends Component<IProps> {
 	};
 
 	selectUser = async () => {
-		// TODO: work with backend
-		Profile.profileContext
-		&&
-		AppContext.changeRoom({
-			id: "1",
-			users: [this.props.data, Profile.profileContext.profile],
-			messages : [],
-			images : 0,
-			documents : 0,
-			group : false
-		});
+		if (Profile.profileContext)
+		{
+			// TODO: work with backend
+			if (!this.room)
+			{
+				this.room = {
+					id: `${i++}`,
+					users: [this.props.data, Profile.profileContext.profile],
+					messages: [],
+					images: 0,
+					documents: 0,
+					group: false
+				};
+			}
+			if (!Profile.roomExist(this.room))
+			{
+				Profile.addRoom(this.room);
+			}
+			const r = ProfileContext.findRoomById(this.room.id);
+
+			r && AppContext.changeRoom(r);
+		}
 	};
 
 	render = () => (

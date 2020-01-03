@@ -4,5 +4,5 @@ import { Room } from "../model/Room";
 export default interface ProfileContext {
   profile : User
   friends : User[]
-  rooms : Room[]
+  rooms   : Room[]
 }

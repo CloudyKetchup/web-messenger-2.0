@@ -5,6 +5,8 @@ import AppContext from "../context/AppContext";
 import { Room }     from "../model/Room";
 import { Message }  from "../model/Message";
 
+import { RoomContextHelpers as RoomContext } from "./RoomContextHelpers";
+
 export class AppContextHelpers {
   static context : AppContext | null = null;  // context with app data for easier access from far away components
   private static components : Component[];    // components that will be rerendered on context update
@@ -24,21 +26,29 @@ export class AppContextHelpers {
    * @param room  {@link Room} selected
    */
   static changeRoom = (room : Room) => {
-    if (AppContextHelpers.context) {
-      AppContextHelpers.context.roomSelected = room;
+    if (!RoomContext.context)
+    {
+      RoomContext.createContext({
+        data  : room,
+        user  : undefined,
+        stats : undefined
+      });
+      AppContextHelpers.components.forEach(c => c.forceUpdate());
     }
-    AppContextHelpers.components.forEach(c => c.forceUpdate());
+    RoomContext.changeRoom(room);
   };
 
   /**
-   * Get message from currently selected chat {@link Room}
+   * Send message to server side and after that depending on response,
+   * update update related room context
    * 
-   * @return {@link Message} list or undefined if context/selected room is null
+   * @param message   {@link Message} objectk
    */
-  static getMessages = () : Message[] | undefined => AppContextHelpers.context?.roomSelected?.messages;
-
   static sendMessage = async (message : Message) => {
-    AppContextHelpers.context?.roomSelected?.messages.push(message);
+    if (RoomContext.context?.data)
+    {
+      RoomContext.addMessage(message);
+    }
     AppContextHelpers.components.forEach(c => c.forceUpdate());
   };
 }
