@@ -2,10 +2,11 @@ import React, { Component } from "react";
 
 import { Room } from "../../model/Room";
 import { User } from "../../model/User";
-import { Message } from "../../model/Message";
+import { Message, State } from "../../model/Message";
 
-import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
-import { AppContextHelpers as AppContext } from "../../helpers/AppContextHelpers";
+import { ProfileContextHelpers as Profile } 	from "../../helpers/ProfileContextHelpers";
+import { AppContextHelpers as AppContext } 		from "../../helpers/AppContextHelpers";
+import { RoomContextHelpers as RoomContext } 	from "../../helpers/RoomContextHelpers";
 
 import MessageComponent from "../MessageComponent/MessageComponent";
 
@@ -17,28 +18,40 @@ type IState = {
 	choosenImages : FileList | null
 	user 					: User | null
 	typing 				: boolean
-	messages			: Message[]
+	messages 			: Message[]
 };
+
+let i = 0;
 
 export default class RoomChatComponent extends Component<IProps, IState> {
 	state : IState = {
 		choosenImages : null,
 		user 					: null,
 		typing 				: true,
-		messages			: []
+		messages 			: []
 	};
 
 	componentDidMount = async () => {
 		const user = this.props.data.users.filter(u => u.id !== Profile.profileContext?.profile.id)[0];
 
-		if (AppContext.context && AppContext.context.roomSelected) {
-			user
-			?
-			this.setState({ user: user, messages: AppContext.context.roomSelected.messages })
-			:
-			this.setState({ messages: AppContext.context.roomSelected.messages });
+		if (RoomContext.context?.data)
+		{
+			user && this.setState({ user : user })
+
+			this.setState({ messages : RoomContext.context.data.messages });
 		}
+		// register this component to be updated on room context update
+		RoomContext.registerComponent(this);
 	};
+
+	componentDidUpdate = () => {
+		/* if this component was updated and messages from context didn't match with those from
+			 state -> assign messages from context to state to update the ui */
+		if (RoomContext.context?.data && RoomContext.getCurrentRoomMessages() !== this.state.messages)
+		{
+			this.setState({ messages : RoomContext.getCurrentRoomMessages() });
+		}
+	}
 
 	chooseImages = async () => {
 		const input = document.getElementById(`room-${this.props.data.id}-choose-images`);
@@ -49,12 +62,14 @@ export default class RoomChatComponent extends Component<IProps, IState> {
 	sendMessage = async () => {
 		const input = document.getElementById(`room-${this.props.data.id}-input`) as HTMLInputElement;
 
-		if (input && input.value !== "" && Profile.profileContext) {
+		if (input && input.value !== "" && Profile.profileContext)
+		{
 			await AppContext.sendMessage({
-				id: "1",
-				text: input.value,
+				id		: `${i++}`,
+				text	: input.value,
 				author: Profile.profileContext?.profile,
-				time : new Date().getTime()
+				time 	: new Date().getTime(),
+				state : State.UNREAD
 			});
 		}
 	};
@@ -75,7 +90,7 @@ export default class RoomChatComponent extends Component<IProps, IState> {
 			</div>
 			<div className="room-chat-body">
 				<div className="chat-messages-container">
-					{this.state.messages.map(m => <MessageComponent data={m}/>)}
+					{this.state.messages.map(m => <MessageComponent key={m.id} data={m}/>)}
 				</div>
 			</div>
 			<div className="room-chat-footer">
