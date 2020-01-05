@@ -58,7 +58,7 @@ export default class ListUserComponent extends Component<IProps> {
 			{
 				Profile.addRoom(this.room);
 			}
-			const r = ProfileContext.findRoomById(this.room.id);
+			const r = Profile.findRoomById(this.room.id);
 
 			r && AppContext.changeRoom(r);
 		}
