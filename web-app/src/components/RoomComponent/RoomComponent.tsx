@@ -22,7 +22,7 @@ export default class RoomComponent extends Component<IProps> {
 	render = () => (
 		<div className="room-component">
 			<RoomChatComponent data={this.props.data}/>
-			<RoomChatInfoComponent/>
+			<RoomChatInfoComponent data={this.props.data}/>
 		</div>
 	);
 }
