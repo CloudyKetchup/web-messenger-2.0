@@ -1,0 +1,8 @@
+rootProject.name = 'web-messenger-2.0'
+
+include ":common",
+        ":eureka-server",
+        ":gateway",
+        ":messaging-service",
+        ":database-service"
+        ":web-app"

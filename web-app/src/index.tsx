@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
 import App from './App';
+import { LoginWindowComponent }         from "./components/LoginWindowComponent/LoginWindowComponent";
+import { RegistrationWindowComponent }  from "./components/RegistrationWindowComponent/RegistrationWindowComponent";
+
+import { ProfileContextHelpers as Profile } from './helpers/ProfileContextHelpers';
+
+import { Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
+
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+export default class AppWrapper extends Component {
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+  render = () => (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={() => <Redirect to={Profile.profileContext ? "/chat" : "/login"} />} />
+        <Route exact path="/login" component={LoginWindowComponent}/>
+        <Route exact path="/register" component={RegistrationWindowComponent}/>
+        <Route path="/chat" component={App} />
+      </Switch>
+    </Router>
+  );
+}
+
+ReactDOM.render(<AppWrapper/>, document.getElementById('root'));
+
 serviceWorker.unregister();

@@ -1,0 +1,95 @@
+.room-chat-info {
+  border-left: 1px solid #a9a9a9;
+  background: white;
+  margin-left: auto;
+  width: 300px;
+}
+
+.room-chat-info-separator {
+  height: 1px;
+  background: #a9a9a9;
+  width: 80%;
+}
+
+.room-chat-info-header .room-chat-info-user {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.room-chat-info-header {
+  font-weight: 300;
+  text-align: center;
+  line-height: 50px;
+  height: 50px;
+}
+
+.room-chat-info-user {
+  height: 200px;
+}
+
+#room-chat-info-user-photo {
+  padding: 10px;
+  width: 110px;
+}
+
+#room-chat-info-user-photo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+}
+
+.room-chat-info-user > div:first-child {
+  height: 40%;
+  display: flex;
+}
+
+.room-chat-info-user > div:first-child > div {
+  padding: 20px 5px;
+  width: -webkit-fill-available;
+}
+
+.room-chat-info-user > div:last-child {
+  height: 60%;
+  display: grid;
+  grid-auto-columns: minmax(3, 100px);
+}
+
+.room-chat-info-user span {
+  line-height: 40px;
+  font-weight: 200;
+  margin-left: 10px;
+}
+
+.room-chat-info-control {
+  display: grid;
+  height: auto;
+}
+
+.room-chat-info-control > button {
+  height: 50px;
+}
+
+.room-chat-info-control > button span {
+  font-size: 15px;
+  margin-right: 50px;
+}
+
+.room-chat-info-control > button img, .room-chat-info-control > button i {
+  float: left;
+  margin-left: 10px;
+}
+
+.room-chat-info-control > button img {
+  height: 25px;
+  width: 25px;
+}
+
+.room-chat-info-files {
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: max-content;
+  height: calc(100% - 400px);
+}
+
+.room-chat-info-files > div {
+  width: fit-content;
+}
