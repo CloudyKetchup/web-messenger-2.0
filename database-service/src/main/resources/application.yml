@@ -1,0 +1,27 @@
+server:
+  port: 8200
+spring:
+  application:
+    name: database-service
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-dll: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+  datasource:
+    initialization-mode: always
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/web_messenger
+    username: krypt0n
+    password: 1708
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true

@@ -1,0 +1,19 @@
+server:
+  port: 8200
+spring:
+  application:
+    name: database-service
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-dll: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  datasource:
+    initialization-mode: always
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/web_messenger_tests
+    username: krypt0n
+    password: 1708
