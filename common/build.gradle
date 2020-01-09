@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+version 'unspecified'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation  'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
