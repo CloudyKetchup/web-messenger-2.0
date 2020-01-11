@@ -3,6 +3,7 @@ rootProject.name = 'web-messenger-2.0'
 include "eureka-server",
         "common",
         "gateway",
+        "account-service",
         "messaging-service",
         "database-service",
         "web-app"
