@@ -8,6 +8,8 @@ group = 'com.krypton'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 12
 
+apply plugin: 'io.spring.dependency-management'
+
 repositories {
 	mavenCentral()
 }
@@ -17,10 +19,10 @@ ext {
 }
 
 dependencies {
+	implementation files("../common/build/libs/common.jar")
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	implementation project(":common")
 	runtimeOnly 'org.postgresql:postgresql'
 	compileOnly 'org.projectlombok:lombok:1.18.10'
 	annotationProcessor 'org.projectlombok:lombok:1.18.10'
