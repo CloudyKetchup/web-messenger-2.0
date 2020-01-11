@@ -1,5 +1,6 @@
-package com.krypton.messagingservice;
+package com.krypton.messagingservice.controller;
 
+import com.krypton.common.model.message.ChatMessage;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -7,12 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-public class SocketController
+public class MessageController
 {
 
     @MessageMapping("/message/{id}")
-    @SendTo("/c/message/{id}")
-    public Message message(@DestinationVariable  String id, @RequestBody Message message)
+    @SendTo("/receive/message/{id}")
+    public ChatMessage receiveMessage(@DestinationVariable  String id, @RequestBody ChatMessage message)
     {
         return message;
     }
