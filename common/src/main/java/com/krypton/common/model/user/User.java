@@ -2,6 +2,7 @@ package com.krypton.common.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krypton.common.model.BaseEntity;
+import com.krypton.common.model.media.Image;
 import com.krypton.common.model.room.Room;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public class User extends BaseEntity
     private String nick;
     @Column(nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "chat_user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Image profileImage;
 
     @Builder.Default
     private UserStatus status = UserStatus.OFFLINE;
