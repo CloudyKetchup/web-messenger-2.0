@@ -1,4 +1,4 @@
-package com.krypton.messagingservice.config;
+package com.krypton.roomservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

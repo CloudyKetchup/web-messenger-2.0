@@ -2,7 +2,7 @@ server:
   port: 8100
 spring:
   application:
-    name: websocket-server
+    name: room-service
 eureka:
   client:
     serviceUrl:
