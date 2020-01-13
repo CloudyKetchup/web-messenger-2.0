@@ -1,4 +1,4 @@
-package com.krypton.accountservice.config;
+package com.krypton.databaseservice.config;
 
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
