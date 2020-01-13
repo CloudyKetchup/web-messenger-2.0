@@ -39,6 +39,12 @@ public class UserRepoService implements IUserRepoService
     }
 
     @Override
+    public Iterable<User> saveAll(Iterable<User> entities)
+    {
+        return repository.saveAll(entities);
+    }
+
+    @Override
     public void delete(User model)
     {
         repository.delete(model);
