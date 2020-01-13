@@ -3,7 +3,6 @@ plugins {
 }
 
 group = 'com.krypton'
-version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -19,4 +18,5 @@ dependencies {
 
 jar {
     enabled = true
+    baseName = "common"
 }
