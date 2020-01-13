@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import LeftPanelComponent 									from "./components/LeftPanel/LeftPanelComponent";
-import RoomComponent 												from "./components/RoomComponent/RoomComponent";
+import LeftPanelComponent 						from "./components/LeftPanel/LeftPanelComponent";
+import RoomComponent 							from "./components/RoomComponent/RoomComponent";
 
 import { ProfileContextHelpers as Profile } 	from "./helpers/ProfileContextHelpers";
 import { AppContextHelpers as AppContext }  	from "./helpers/AppContextHelpers";
