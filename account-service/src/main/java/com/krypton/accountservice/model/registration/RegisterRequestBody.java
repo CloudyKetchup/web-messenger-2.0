@@ -4,13 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
 public class RegisterRequestBody
 {
+    @NotNull
     private String nick;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
 
     public RegisterRequestBody(String nick, String email, String password)

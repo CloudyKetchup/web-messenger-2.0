@@ -23,14 +23,13 @@ public class UserController extends EntityController<User, UUID>
     }
 
     @GetMapping(value = "/get", params = "nick")
-    public Optional<User> getByNick(@RequestParam String nick)
+    public Optional<User> getByNick(@RequestParam("nick") String nick)
     {
         return userRepoService.findByNick(nick);
     }
 
-
     @GetMapping(value = "/get", params = "email")
-    public Optional<User> getByEmail(@RequestParam String email)
+    public Optional<User> getByEmail(@RequestParam("email") String email)
     {
         return userRepoService.findByEmail(email);
     }

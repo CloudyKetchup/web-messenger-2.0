@@ -7,13 +7,13 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
+import reactor.core.publisher.Mono;
 
 @Builder
 @Getter
 @Setter
 @ToString
-public class AuthResponse
-{
+public class AuthResponse {
     private HttpStatus status;
     private String message;
     @Nullable

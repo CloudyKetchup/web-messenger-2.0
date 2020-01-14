@@ -19,7 +19,12 @@ public class UserService
         if (feignClient.findByNick(user.getNick()).isPresent())
         {
             return AuthResponse.builder()
-                    .message("Account exists")
+                    .message("Nick already taken")
+                    .build();
+        } else if (feignClient.findByEmail(user.getEmail()).isPresent())
+        {
+            return AuthResponse.builder()
+                    .message("Email already used")
                     .build();
         }
         var acc = feignClient.save(user);
