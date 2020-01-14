@@ -21,8 +21,8 @@ public interface UserFeignClient
     Optional<User> find(@RequestParam UUID id);
 
     @GetMapping(value = "/get", params = "nick")
-    Optional<User> findByNick(@RequestParam String nick);
+    Optional<User> findByNick(@RequestParam("nick") String nick);
 
     @GetMapping(value = "/get", params = "email")
-    Optional<User> findByEmail(@RequestParam String email);
+    Optional<User> findByEmail(@RequestParam("email") String email);
 }

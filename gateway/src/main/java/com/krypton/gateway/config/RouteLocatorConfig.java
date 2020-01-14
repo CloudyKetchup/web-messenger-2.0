@@ -5,18 +5,20 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.function.Predicate;
+
 @Configuration
 public class RouteLocatorConfig
 {
 
-    @Bean
-    public RouteLocator myRoutes(RouteLocatorBuilder builder)
-    {
-        return builder.routes()
-                .route(predicateSpec -> predicateSpec
-                        .path("/s/**")
-                        .uri("lb://websocket-server")
-                )
-                .build();
-    }
+	@Bean
+	public RouteLocator myRoutes(RouteLocatorBuilder builder)
+	{
+		return builder.routes()
+				.route(r -> r
+					.path("/socket/messaging/**")
+					.uri("lb://websocket-server")
+				)
+				.build();
+	}
 }

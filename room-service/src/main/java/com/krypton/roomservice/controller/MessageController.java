@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/message")
-public class MessageController
+public class MessageController extends MainController
 {
 
     @MessageMapping("/add/room/{id}")
