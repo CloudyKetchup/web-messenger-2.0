@@ -1,5 +1,6 @@
 package com.krypton.accountservice;
 
+import com.krypton.accountservice.feign.UserFeignClient;
 import com.krypton.accountservice.model.login.LoginRequestBody;
 import com.krypton.accountservice.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,19 @@ public class UserLoginTests
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserFeignClient feignClient;
+
+    @Test
+    public void find()
+    {
+        System.err.println(feignClient.findByNick("Billy Butcher"));
+    }
+
     @Test
     public void login()
     {
-        var loginBody = LoginRequestBody.builder()
-                .email("maxdodon25@gmail.com")
-                .password("1708")
-                .build();
+        var loginBody = new LoginRequestBody("maxdodon25@gmail.com",  "1708");
 
         var resp = userService.login(loginBody);
 
