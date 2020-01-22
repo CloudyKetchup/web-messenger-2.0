@@ -5,8 +5,7 @@ import com.krypton.databaseservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -54,5 +53,16 @@ public class UserRepoService implements IUserRepoService
     public boolean exists(UUID uuid)
     {
         return repository.findById(uuid).isPresent();
+    }
+
+    @Override
+    public Set<User> getFriends(UUID id)
+    {
+        var user = find(id);
+        var friends = new HashSet<User>();
+
+        user.ifPresent(value -> value.getFriends().forEach(friend -> friends.add(friend.getTarget())));
+
+        return friends;
     }
 }

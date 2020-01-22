@@ -2,12 +2,10 @@ package com.krypton.databaseservice.controller;
 
 import com.krypton.common.model.user.User;
 import com.krypton.databaseservice.service.user.IUserRepoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -23,14 +21,20 @@ public class UserController extends EntityController<User, UUID>
     }
 
     @GetMapping(value = "/get", params = "nick")
-    public Optional<User> getByNick(@RequestParam("nick") String nick)
+    public Optional<User> getByNick(@RequestParam String nick)
     {
         return userRepoService.findByNick(nick);
     }
 
     @GetMapping(value = "/get", params = "email")
-    public Optional<User> getByEmail(@RequestParam("email") String email)
+    public Optional<User> getByEmail(@RequestParam String email)
     {
         return userRepoService.findByEmail(email);
+    }
+
+    @GetMapping("/get/friends")
+    public Set<User> getFriends(@RequestParam String id)
+    {
+        return userRepoService.getFriends(UUID.fromString(id));
     }
 }
