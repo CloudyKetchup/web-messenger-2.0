@@ -1,8 +1,30 @@
 spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        - id: account-service
+          uri: lb://ACCOUNT-SERVICE/
+          predicates:
+            - Path=/account/**
+        - id: room-service
+          uri: lb://ROOM-SERVICE/
+          predicates:
+            - Path=/room/**
   application:
     name: gateway
 eureka:
   client:
+    register-with-eureka: true
+    fetch-registry: true
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
     healthcheck:

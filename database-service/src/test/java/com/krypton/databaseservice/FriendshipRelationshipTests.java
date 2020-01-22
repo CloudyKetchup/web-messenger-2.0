@@ -1,7 +1,8 @@
 package com.krypton.databaseservice;
 
 import com.krypton.common.model.user.User;
-import com.krypton.databaseservice.repository.UserRepository;
+import com.krypton.databaseservice.service.friend.helper.FriendshipHelper;
+import com.krypton.databaseservice.service.user.IUserRepoService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,33 +14,48 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class FriendshipRelationshipTests
 {
     @Autowired
-    private UserRepository userRepository;
+    private IUserRepoService userRepoService;
+
+    @Autowired
+    private FriendshipHelper friendshipHelper;
 
     @Test
-    public void createRelationship()
+    public void createFriendship()
     {
-        var user1 = createUser("Billy Butcher");
-        var user2 = createUser("Loli Master");
+        var user1 = createUser("Billy Butcher", "krypton94@yahoo.com", "1111");
+        var user2 = createUser("Loli Master", "maxdodon25@gmail.com", "2222");
 
-        user1.getFriends().add(user2);
-        user2.getFriends().add(user1);
+        friendshipHelper.createFriendship(user1, user2);
 
-        userRepository.save(user1);
-
-        var u1 = userRepository.findByNick("Billy Butcher");
-        var u2 = userRepository.findByNick("Loli Master");
-
-        u1.ifPresent(l -> System.err.println(l.getFriends()));
-        u2.ifPresent(r -> System.err.println(r.getFriends()));
+        userRepoService.findByNick("Billy Butcher").ifPresent(user -> {
+            System.err.println(user.getFriends());
+        });
+        userRepoService.findByNick("Loli Master").ifPresent(user -> {
+            System.err.println(user.getFriends());
+        });
     }
 
-    private User createUser(String name)
+    @Test
+    public void getFriendUser()
     {
-        var user = User.builder()
-                    .nick(name)
-                    .password("1708")
-                    .build();
+        var user = userRepoService.findByNick("Billy Butcher");
+        final User[] friendUser = new User[1];
 
-        return userRepository.save(user);
+        user.ifPresent(u -> u.getFriends().forEach(friend -> {
+            var t = friend.getTarget();
+
+            if (t.getNick().equals("Loli Master"))
+            {
+                friendUser[0] = t;
+            }
+        }));
+        System.err.println(friendUser[0]);
+    }
+
+    private User createUser(String name, String email, String password)
+    {
+        var user = new User(name, email, password);
+
+        return userRepoService.save(user);
     }
 }

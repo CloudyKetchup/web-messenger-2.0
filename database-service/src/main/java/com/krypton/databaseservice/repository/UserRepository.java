@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, UUID>
 {
     @Query(value = "select * from chat_user where chat_user.nick = :nick", nativeQuery = true)
     Optional<User> findByNick(@Param("nick") String nick);
+
+    @Query(value = "select * from chat_user where chat_user.email = :email", nativeQuery = true)
+    Optional<User> findByEmail(@Param("email") String email);
 }

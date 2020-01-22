@@ -27,6 +27,8 @@ public class ChatMessage extends BaseEntity
     @Column
     private ChatMessageStatus status = ChatMessageStatus.UNREAD;
 
+    public ChatMessage() {}
+
     public ChatMessage(String text, User author)
     {
         this.text = text;
