@@ -1,4 +1,4 @@
-package com.krypton.accountservice.config;
+package com.krypton.databaseservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
@@ -12,7 +12,7 @@ public class CorsConfiguration implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("http://localhost:3000", "http://localhost:8300")
                 .allowedMethods("PUT", "GET", "POST", "DELETE")
                 .maxAge(3600);
     }
