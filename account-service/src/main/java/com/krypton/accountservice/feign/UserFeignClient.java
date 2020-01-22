@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
-@FeignClient(name = "DATABASE-SERVICE", path = "/user", configuration = FeignConfig.class)
+@FeignClient(name = "database-service", path = "/user", configuration = FeignConfig.class)
 public interface UserFeignClient
 {
     @PostMapping("/save")
@@ -25,4 +26,7 @@ public interface UserFeignClient
 
     @GetMapping(value = "/get", params = "email")
     Optional<User> findByEmail(@RequestParam("email") String email);
+
+    @GetMapping("/get/friends")
+    Set<User> getFriends(@RequestParam String id);
 }

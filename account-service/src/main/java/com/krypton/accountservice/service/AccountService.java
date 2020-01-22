@@ -2,8 +2,6 @@ package com.krypton.accountservice.service;
 
 import com.krypton.accountservice.feign.UserFeignClient;
 import com.krypton.accountservice.model.AuthResponse;
-import com.krypton.accountservice.model.login.LoginRequestBody;
-import com.krypton.accountservice.model.registration.RegisterRequestBody;
 import com.krypton.common.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UserService
+public class AccountService
 {
     private final UserFeignClient feignClient;
 
