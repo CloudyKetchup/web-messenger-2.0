@@ -2,7 +2,7 @@ package com.krypton.accountservice;
 
 import com.krypton.accountservice.feign.UserFeignClient;
 import com.krypton.accountservice.model.login.LoginRequestBody;
-import com.krypton.accountservice.service.UserService;
+import com.krypton.accountservice.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class UserLoginTests
 {
 
     @Autowired
-    private UserService userService;
+    private AccountService userService;
 
     @Autowired
     private UserFeignClient feignClient;
@@ -29,9 +29,7 @@ public class UserLoginTests
     @Test
     public void login()
     {
-        var loginBody = new LoginRequestBody("maxdodon25@gmail.com",  "1708");
-
-        var resp = userService.login(loginBody);
+        var resp = userService.login("maxdodon25@gmail.com", "1708");
 
         System.err.println(resp);
     }

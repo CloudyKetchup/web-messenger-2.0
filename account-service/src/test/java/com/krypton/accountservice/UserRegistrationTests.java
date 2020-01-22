@@ -1,6 +1,6 @@
 package com.krypton.accountservice;
 
-import com.krypton.accountservice.service.UserService;
+import com.krypton.accountservice.service.AccountService;
 import com.krypton.common.model.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,14 +14,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UserRegistrationTests
 {
     @Autowired
-    private UserService userService;
+    private AccountService userService;
 
     @Test
     public void register()
     {
-        var user = new User("John Wick", "maxdodon25@gmail.com" , "1708");
-
-        var response = userService.register(user);
+        var response = userService.register("John Wick", "maxdodon25@gmail.com", "1708");
 
         System.err.println(response);
     }
@@ -29,9 +27,7 @@ public class UserRegistrationTests
     // should not be able to register and return a message like ,,Account already exists,,
     @Test
     public void registerWithExistingNick() {
-        var user = new User("John Wick", "maxdodon25@gmail.com", "1711");
-
-        var response = userService.register(user);
+        var response = userService.register("John Wick", "maxdodon25@gmail.com", "1711");
 
         assert response.getStatus().equals(HttpStatus.INTERNAL_SERVER_ERROR);
     }
