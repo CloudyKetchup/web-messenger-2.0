@@ -37,4 +37,10 @@ public class UserController extends EntityController<User, UUID>
     {
         return userRepoService.getFriends(UUID.fromString(id));
     }
+
+    @GetMapping(value = "/search", params = "query")
+    public Set<User> search(@RequestParam String query)
+    {
+        return userRepoService.search(query);
+    }
 }

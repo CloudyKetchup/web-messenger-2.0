@@ -29,4 +29,7 @@ public interface UserFeignClient
 
     @GetMapping("/get/friends")
     Set<User> getFriends(@RequestParam String id);
+
+    @GetMapping(value = "/search", params = "query")
+    Set<User> search(@RequestParam String query);
 }

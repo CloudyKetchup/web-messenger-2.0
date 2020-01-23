@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import LeftPanelComponent from "./components/LeftPanel/LeftPanelComponent";
 import RoomComponent 			from "./components/RoomComponent/RoomComponent";
+import SearchComponent 		from "./components/SearchComponent/SearchComponent";
 
 import { ProfileContextHelpers as Profile } 	from "./helpers/ProfileContextHelpers";
 import { AppContextHelpers as AppContext }  	from "./helpers/AppContextHelpers";
@@ -30,6 +31,7 @@ export default class App extends Component
 				&&
 				<RoomComponent data={RoomContext.context.data}/>
 			}
+			<SearchComponent/>
 		</div>
 	);
 }

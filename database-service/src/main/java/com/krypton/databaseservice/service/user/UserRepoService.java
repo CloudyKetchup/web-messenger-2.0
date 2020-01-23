@@ -5,6 +5,7 @@ import com.krypton.databaseservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotBlank;
 import java.util.*;
 
 @Service
@@ -64,5 +65,13 @@ public class UserRepoService implements IUserRepoService
         user.ifPresent(value -> value.getFriends().forEach(friend -> friends.add(friend.getTarget())));
 
         return friends;
+    }
+
+    @Override
+    public Set<User> search(@NotBlank String query)
+    {
+        if (query.isBlank()) return new HashSet<>();
+
+        return repository.searchByNick(query);
     }
 }
