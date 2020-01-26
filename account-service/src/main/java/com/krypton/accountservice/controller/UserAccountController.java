@@ -3,6 +3,7 @@ package com.krypton.accountservice.controller;
 import com.krypton.accountservice.model.AuthResponse;
 import com.krypton.accountservice.service.AccountService;
 import com.krypton.accountservice.service.UserService;
+import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
 import com.krypton.common.model.user.User;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,12 @@ public class UserAccountController extends MainController
     @GetMapping("/get/rooms")
     public Set<Room> getRooms(@RequestParam String id)
     {
-        return userService.getAllRooms(UUID.fromString(id));
+        return userService.getAllRooms(id);
+    }
+
+    @GetMapping("/get/friend-requests")
+    public Set<FriendRequest> getFriendRequests(@RequestParam String id)
+    {
+        return userService.getFriendRequests(id);
     }
 }
