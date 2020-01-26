@@ -1,5 +1,7 @@
 package com.krypton.databaseservice.service.user;
 
+import com.krypton.common.model.request.FriendRequest;
+import com.krypton.common.model.room.Room;
 import com.krypton.common.model.user.User;
 import com.krypton.databaseservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -68,10 +70,44 @@ public class UserRepoService implements IUserRepoService
     }
 
     @Override
+    public Set<Room> getRooms(UUID id)
+    {
+        var user = find(id);
+
+        if (user.isPresent())
+        {
+            return user.get().getRooms();
+        }
+        return new HashSet<>();
+    }
+
+    @Override
     public Set<User> search(@NotBlank String query)
     {
         if (query.isBlank()) return new HashSet<>();
 
         return repository.searchByNick(query);
+    }
+
+    @Override
+    public void addFriendRequest(FriendRequest request)
+    {
+        var target = request.getTo();
+
+        target.getFriendRequests().add(request);
+
+        save(target);
+    }
+
+    @Override
+    public Set<FriendRequest> getFriendRequests(UUID id)
+    {
+        var user = find(id);
+
+        if (user.isPresent())
+        {
+            return user.get().getFriendRequests();
+        }
+        return new HashSet<>();
     }
 }
