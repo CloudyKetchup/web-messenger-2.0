@@ -1,4 +1,4 @@
 package com.krypton.accountservice.controller;
 
-public class MainController {
+public class UserRequestsController {
 }
