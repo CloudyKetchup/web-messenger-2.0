@@ -31,7 +31,7 @@ export enum TAB
 export default class SearchComponent extends Component<IProps, IState>
 {
   state : IState = {
-    choosenTab : TAB.FRIENDS,
+    choosenTab : this.props.defaultTab || TAB.FRIENDS,
     result : []
   };
 

@@ -39,7 +39,7 @@ export const UserSearchResultComponent : FC<IProps> = props =>
         &&
         <div className="search-user-friend-request-button">
           {/* send friend request */}
-          <button><i className="far fa-paper-plane" /></button>
+          <button onClick={sendFriendRequest}><i className="far fa-paper-plane" /></button>
         </div>
       }
     </div>

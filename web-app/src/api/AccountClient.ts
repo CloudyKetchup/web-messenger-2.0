@@ -35,4 +35,11 @@ export class AccountClient
       .then(response => response.data)
       .catch(console.log)
   );
+
+  static sendFriendRequest = (id : string, targetId : string) : Promise<String>=>
+  (
+    axios.post(`${URL}/request/friendship/send?from=${id}&to=${targetId}`)
+      .then(response => response.data)
+      .catch(console.log)
+  );
 }
