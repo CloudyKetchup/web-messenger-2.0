@@ -1,11 +1,9 @@
-package com.krypton.notificationservice.service.friendshiprequest;
+package com.krypton.accountservice.service.request.friendship;
 
+import com.krypton.accountservice.service.request.IRequestService;
 import com.krypton.common.model.request.FriendRequest;
-import com.krypton.notificationservice.service.INotificationService;
 
-import java.util.Optional;
-
-public interface IFriendshipRequestNotificationService extends INotificationService<FriendRequest, String>
+public interface IFriendshipRequestService extends IRequestService<FriendRequest, String>
 {
-  Optional<FriendRequest> createNotification(String from, String to);
+  void send(String from, String to);
 }

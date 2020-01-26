@@ -3,6 +3,7 @@ package com.krypton.common.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krypton.common.model.BaseEntity;
 import com.krypton.common.model.media.Image;
+import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString(exclude = {"rooms", "friends"})
+@ToString(exclude = {"rooms", "friends", "friendRequests"})
 @Entity
 @Table(name = "chat_user")
 public class User extends BaseEntity
@@ -41,6 +42,10 @@ public class User extends BaseEntity
             inverseJoinColumns = { @JoinColumn(name = "friend_id") })
     @JsonIgnore
     private Set<Friend> friends = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<FriendRequest> friendRequests = new HashSet<>();
 
     public User() {}
 

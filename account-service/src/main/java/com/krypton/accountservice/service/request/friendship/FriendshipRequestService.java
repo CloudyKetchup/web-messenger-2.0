@@ -1,50 +1,46 @@
-package com.krypton.notificationservice.service.friendshiprequest;
+package com.krypton.accountservice.service.request.friendship;
 
+import com.krypton.accountservice.feign.FriendRequestFeignClient;
+import com.krypton.accountservice.feign.NotificationFeignClient;
+import com.krypton.accountservice.feign.UserFeignClient;
 import com.krypton.common.model.request.FriendRequest;
-import com.krypton.notificationservice.feign.FriendRequestFeignClient;
-import com.krypton.notificationservice.feign.UserFeignClient;
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class FriendshipRequestNotificationService implements IFriendshipRequestNotificationService
+public class FriendshipRequestService implements IFriendshipRequestService
 {
-  private final FriendRequestFeignClient feignClient;
   private final UserFeignClient userFeignClient;
-  private final SimpMessagingTemplate simpMessagingTemplate;
+  private final NotificationFeignClient notificationFeignClient;
+  private final FriendRequestFeignClient friendRequestFeignClient;
 
   @Override
-  public Optional<FriendRequest> createNotification(String from, String to)
+  public void send(String from, String to)
   {
     var fromUser = userFeignClient.findById(from);
     var toUser = userFeignClient.findById(to);
 
-    if (fromUser.isEmpty() || toUser.isEmpty()) return Optional.empty();
-
-    return Optional.of(new FriendRequest(fromUser.get(), toUser.get()));
-  }
-
-  @Override
-  public void sendNotification(FriendRequest notification)
-  {
-    var target = notification.getTo();
-
-    simpMessagingTemplate.convertAndSend(notification);
-  }
-
-  @Override
-  public void sendNotification(String from, String to)
-  {
-    var fromUser = userFeignClient.findById(from);
-    var toUser = userFeignClient.findById(to);
-
-    if (fromUser.isPresent() && toUser.isPresent())
+    if (!sent(from, to) && fromUser.isPresent() && toUser.isPresent())
     {
-      sendNotification(new FriendRequest(fromUser.get(), toUser.get()));
+      var request = friendRequestFeignClient.save(new FriendRequest(fromUser.get(), toUser.get()));
+
+      if (request.isPresent())
+      {
+        addToUser(request.get());
+
+        if (!sent(from, to))
+        {
+          delete(request.get());
+        }
+        // TODO: test it
+//      if (sent(from, to))
+//      {
+//        notificationFeignClient.sendFriendRequestNotification(request);
+//      }
+      }
     }
   }
 
@@ -53,26 +49,31 @@ public class FriendshipRequestNotificationService implements IFriendshipRequestN
   {
     var toUser = userFeignClient.findById(to);
     var fromUser = userFeignClient.findById(from);
-    final boolean[] result = {false};
 
     if (toUser.isPresent() && fromUser.isPresent())
     {
-      toUser.get()
-        .getFriendRequests()
+      return userFeignClient
+        .getFriendRequest(to)
         .parallelStream()
-        .forEach(notification -> {
-          if (notification.getFrom().getId().equals(fromUser.get().getId()))
-          {
-            result[0] = true;
-          }
-        });
+        .anyMatch(request -> request.getFrom().getId().equals(fromUser.get().getId()));
     }
-    return result[0];
+    return false;
   }
 
   @Override
-  public Optional<FriendRequest> save(FriendRequest notification)
+  public Optional<FriendRequest> save(FriendRequest request)
   {
-    return feignClient.save(notification);
+    return friendRequestFeignClient.save(request);
+  }
+
+  @Override
+  public void delete(FriendRequest request)
+  {
+    friendRequestFeignClient.delete(request.getId());
+  }
+
+  private void addToUser(FriendRequest request)
+  {
+    userFeignClient.addFriendRequest(request);
   }
 }

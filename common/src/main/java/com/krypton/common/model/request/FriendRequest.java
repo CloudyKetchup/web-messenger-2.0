@@ -1,5 +1,6 @@
-package com.krypton.common.model.notification;
+package com.krypton.common.model.request;
 
+import com.krypton.common.model.BaseEntity;
 import com.krypton.common.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import javax.persistence.OneToOne;
 @Setter
 @ToString
 @Entity
-public class FriendRequestNotification
+public class FriendRequest extends BaseEntity
 {
   @OneToOne
   private User from;
@@ -22,9 +23,9 @@ public class FriendRequestNotification
 
   private String text;
 
-  public FriendRequestNotification() {}
+  public FriendRequest() {}
 
-  public FriendRequestNotification(User from, User to)
+  public FriendRequest(User from, User to)
   {
     this.from = from;
     this.to = to;
