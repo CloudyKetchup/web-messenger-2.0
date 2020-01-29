@@ -7,7 +7,8 @@ import { ProfileContextHelpers as Profile } from "./ProfileContextHelpers";
 import { Room }     from "../model/Room";
 import { Message }  from "../model/Message";
 
-export class RoomContextHelpers {
+export class RoomContextHelpers
+{
   static context : RoomContext | null = null;
   private static components : Component[] = [];
 
@@ -18,9 +19,10 @@ export class RoomContextHelpers {
    * @param context     {@link RoomContext} object
    * @param components  {@link Component}'s for registration see see {@see RoomContextHelpers.registerComponent} docs
    */
-  static createContext = (context : RoomContext, ...components : Component[]) => {
+  static createContext = (context : RoomContext, ...components : Component[]) =>
+  {
     RoomContextHelpers.context = context;
-    RoomContextHelpers.components = components;
+    components.forEach(RoomContextHelpers.registerComponent);
   };
 
   /**
@@ -29,11 +31,18 @@ export class RoomContextHelpers {
    * 
    * @param component   {@link Component} to be registered to list
    */
-  static registerComponent = (component : Component) => {
-    if (!RoomContextHelpers.components.includes(component))
+  static registerComponent = (component : Component) =>
+  {
+    const alreadyExists = () =>
     {
-      RoomContextHelpers.components.push(component);
-    }
+      RoomContextHelpers.components.forEach(c => {
+        if (c == component)
+          return true;
+      });
+      return false;
+    };
+
+    !alreadyExists() && RoomContextHelpers.components.push(component);
   };
 
   /**
@@ -41,7 +50,8 @@ export class RoomContextHelpers {
    * 
    * @param room    {@link Room} for swaping
    */
-  static changeRoom = (room : Room) => {
+  static changeRoom = (room : Room) =>
+  {
     if (RoomContextHelpers.context)
     {
       RoomContextHelpers.context.data = room;
@@ -54,7 +64,8 @@ export class RoomContextHelpers {
    * 
    * @return {Message} list or empty list if context or context data is null
    */
-  static getCurrentRoomMessages = () : Message[] => {
+  static getCurrentRoomMessages = () : Message[] =>
+  {
     if (RoomContextHelpers.context?.data)
     {
       return RoomContextHelpers.context.data.messages;
@@ -63,11 +74,13 @@ export class RoomContextHelpers {
   };
 
   /**
-   * Add a message to room from profile and assign this room again to context data
+   * Add a message to room from profile and assign this room again to context data,
+   * basically we add message to current selected room
    * 
    * @param message   {@link Message}
    */
-  static addMessage = (message : Message) => {
+  static addMessage = async (message : Message) =>
+  {
     if (RoomContextHelpers.context && RoomContextHelpers.context.data)
     {
       // find current room in rooms list from profile context
