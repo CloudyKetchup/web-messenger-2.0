@@ -99,7 +99,8 @@ export class RegistrationWindowComponent extends Component<{ history : History }
         Profile.createContext({
           profile : result.account,
           friends : await AccountClient.getFriends(result.account.id),
-          rooms   : await AccountClient.getRooms(result.account.id)
+          rooms   : await AccountClient.getRooms(result.account.id),
+          friendRequests : await AccountClient.getFriendRequests(result.account.id)
         })
         this.props.history.push("/chat");
       }

@@ -32,7 +32,8 @@ export const LoginWindowComponent : FC<{ history : History }> = props =>
       Profile.createContext({
         profile : result.account,
         friends : await AccountClient.getFriends(result.account.id),
-        rooms   : await AccountClient.getRooms(result.account.id)
+        rooms   : await AccountClient.getRooms(result.account.id),
+        friendRequests : await AccountClient.getFriendRequests(result.account.id)
       });
       props.history.push("/chat");
     }
