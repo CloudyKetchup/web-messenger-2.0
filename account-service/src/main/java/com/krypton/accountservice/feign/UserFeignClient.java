@@ -42,5 +42,5 @@ public interface UserFeignClient
     void addFriendRequest(@RequestBody FriendRequest request);
 
     @GetMapping(value = "/get/friend-requests", params = "id")
-    Set<FriendRequest> getFriendRequest(@RequestParam String id);
+    Set<FriendRequest> getFriendRequests(@RequestParam String id);
 }
