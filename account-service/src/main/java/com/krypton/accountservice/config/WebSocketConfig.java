@@ -1,4 +1,4 @@
-package com.krypton.notificationservice.config;
+package com.krypton.accountservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -14,17 +14,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config)
     {
-        config.enableSimpleBroker("/n");
+        config.enableSimpleBroker("/acc");
         config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry)
     {
-        registry.addEndpoint("/notification/socket")
+        registry.addEndpoint("/user-service/socket")
           .setAllowedOrigins("*")
           .withSockJS();
-        registry.addEndpoint("/notification/socket")
+        registry.addEndpoint("/user-service/socket")
           .setAllowedOrigins("*");
     }
 }
