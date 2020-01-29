@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface FriendRequestFeignClient
 {
   @GetMapping(value = "/get", params = "id")
-  Optional<FriendRequest> findById(@RequestBody UUID ID);
+  Optional<FriendRequest> findById(@RequestParam UUID id);
 
   @PostMapping("/save")
   Optional<FriendRequest> save(@RequestBody FriendRequest request);
