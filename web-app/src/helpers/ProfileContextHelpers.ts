@@ -1,8 +1,13 @@
 import ProfileContext from "../context/ProfileContext";
 
 import { Room } from "../model/Room";
+import { User } from "../model/User";
+import { FriendRequest } from "../model/request/FriendRequest";
 
-export class ProfileContextHelpers {
+import { AppContextHelpers } from "./AppContextHelpers";
+
+export class ProfileContextHelpers
+{
   static profileContext : ProfileContext | null = null;
 
   /**
@@ -17,14 +22,37 @@ export class ProfileContextHelpers {
    * Add a room to rooms list from profile
    * 
    * @param room    {@link Room}
-   * @return {@link Room} or void depending on success
    */
-  static addRoom = (room : Room) : Room | void => {
+  static addRoom = (room : Room) =>
+  {
     if (!ProfileContextHelpers.roomExist(room))
     {
       ProfileContextHelpers.profileContext?.rooms.push(room);
+    }
+  };
 
-      return ProfileContextHelpers.findRoomById(room.id);
+  /**
+   * Add a frient to friends list from profile
+   * 
+   * @param friend  {@link User}
+   */
+  static addFriend = (friend : User) =>
+  {
+    if (ProfileContextHelpers.profileContext?.friends && !ProfileContextHelpers.friendExists(friend))
+    {
+      ProfileContextHelpers.profileContext.friends.push(friend);
+
+      AppContextHelpers.updateFriendsList(ProfileContextHelpers.profileContext.friends);
+    }
+  };
+
+  static addFriendRequest = (request : FriendRequest) =>
+  {
+    if (ProfileContextHelpers.profileContext)
+    {
+      ProfileContextHelpers.profileContext.friendRequests.push(request);
+
+      AppContextHelpers.updateFriendRequestsLists(ProfileContextHelpers.profileContext.friendRequests);
     }
   };
 
@@ -34,7 +62,8 @@ export class ProfileContextHelpers {
    * @param id    {@link Room} id
    * @return {@link Room} or void if not found
    */
-  static findRoomById = (id : string) : Room | void => {
+  static findRoomById = (id : string) : Room | void =>
+  {
     return ProfileContextHelpers.profileContext?.rooms.filter(r => r.id === id)[0];
   };
 
@@ -44,7 +73,18 @@ export class ProfileContextHelpers {
    * @param room    {@link Room}
    * @return boolean depending on result
    */
-  static roomExist = (room : Room) : Boolean => {
-    return ProfileContextHelpers.profileContext?.rooms.filter(r => r === room)[0] !== undefined;
-  }
+  static roomExist = (room : Room) : Boolean =>
+  {
+    return ProfileContextHelpers.profileContext?.rooms.find(r => r.id === room.id) !== undefined;
+  };
+
+  /**
+   * Checks if friend exists in friendslist from profile context
+   * 
+   * @param friend  {@link User}
+   */
+  static friendExists = (friend : User) : Boolean =>
+  {
+    return ProfileContextHelpers.profileContext?.friends.find(f => f.id === friend.id) !== undefined;
+  };
 }
