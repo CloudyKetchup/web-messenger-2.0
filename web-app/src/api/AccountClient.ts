@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthReponse } from "../model/AuthResponse";
 import { User } from "../model/User";
 import { Room } from "../model/Room";
+import { FriendRequest } from "../model/request/FriendRequest";
 
 const URL = "http://localhost:8080/account";
 
@@ -36,9 +37,9 @@ export class AccountClient
       .catch(console.log)
   );
 
-  static sendFriendRequest = (id : string, targetId : string) : Promise<String>=>
+  static getFriendRequests = (id : string) : Promise<FriendRequest[]> =>
   (
-    axios.post(`${URL}/request/friendship/send?from=${id}&to=${targetId}`)
+    axios.get(`${URL}/get/friend-requests?id=${id}`)
       .then(response => response.data)
       .catch(console.log)
   );
