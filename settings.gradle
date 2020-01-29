@@ -6,5 +6,4 @@ include "eureka-server",
         "account-service",
         "room-service",
         "database-service",
-        "notification-service",
         "web-app"
