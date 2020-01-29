@@ -92,11 +92,13 @@ public class UserRepoService implements IUserRepoService
     @Override
     public void addFriendRequest(FriendRequest request)
     {
-        var target = request.getTo();
+        var target = find(request.getTo().getId());
 
-        target.getFriendRequests().add(request);
-
-        save(target);
+        target.ifPresent(user ->
+        {
+            user.getFriendRequests().add(request);
+            save(user);
+        });
     }
 
     @Override
