@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserService
 {
-  private final UserFeignClient feignClient;
+  private UserFeignClient feignClient;
 
   public Set<Room> getAllRooms(String id)
   {
@@ -26,17 +26,17 @@ public class UserService
   public Set<User> getAllFriends(UUID id)
   {
     var user = feignClient.find(id);
-    var friends = new HashSet<User>();
 
-    user.ifPresent(u -> u.getFriends()
-      .parallelStream()
-      .forEach(f -> friends.add(f.getTarget())));
-    return friends;
+    if (user.isPresent())
+    {
+      return feignClient.getFriends(user.get().getId().toString());
+    }
+    return new HashSet<>();
   }
 
   public Set<FriendRequest> getFriendRequests(String id)
   {
-    return feignClient.getFriendRequest(id);
+    return feignClient.getFriendRequests(id);
   }
 
   public Set<SearchResultUser> search(String query, User account)
@@ -56,17 +56,8 @@ public class UserService
 
   public boolean areFriends(User user1, User user2)
   {
-    final boolean[] friends = {false};
+    var user1Friends = feignClient.getFriends(user1.getId().toString());
 
-    user1.getFriends()
-      .parallelStream()
-      .forEach(friend ->
-      {
-        if (friend.getTarget().getId().equals(user2.getId()))
-        {
-          friends[0] = true;
-        }
-      });
-    return friends[0];
+    return user1Friends.parallelStream().anyMatch(friend -> friend.getId().equals(user2.getId()));
   }
 }
