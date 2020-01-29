@@ -3,6 +3,7 @@ package com.krypton.databaseservice.service.request.friend;
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.databaseservice.repository.FriendRequestRepository;
 import com.krypton.databaseservice.service.IModelService;
+import com.krypton.databaseservice.service.user.IUserRepoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class FriendRequestService implements IModelService<FriendRequest, UUID>
 {
   private final FriendRequestRepository friendRequestRepository;
+  private final IUserRepoService userRepoService;
 
   @Override
   public Optional<FriendRequest> find(UUID uuid)
@@ -36,6 +38,14 @@ public class FriendRequestService implements IModelService<FriendRequest, UUID>
   @Override
   public void delete(FriendRequest model)
   {
+    var toUser = userRepoService.find(model.getTo().getId());
+
+    toUser.ifPresent(user -> {
+      user.getFriendRequests().removeIf(request -> request.getId().equals(model.getId()));
+
+      userRepoService.save(user);
+    });
+
     friendRequestRepository.delete(model);
   }
 
