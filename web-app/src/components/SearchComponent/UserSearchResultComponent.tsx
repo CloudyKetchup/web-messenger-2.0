@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { AccountClient } from "../../api/AccountClient";
+import { FriendRequestClient } from "../../api/FriendRequestClient";
 
 import { UserSearchResult } from "../../model/search/UserSearchResult";
 
@@ -16,7 +16,7 @@ export const UserSearchResultComponent : FC<IProps> = props =>
   {
     if (Profile.profileContext)
     {
-      await AccountClient.sendFriendRequest(Profile.profileContext.profile.id, props.data.user.id);
+      await FriendRequestClient.sendRequest(Profile.profileContext.profile.id, props.data.user.id);
     }
   };
 
