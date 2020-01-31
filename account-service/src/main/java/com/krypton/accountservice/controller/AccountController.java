@@ -2,17 +2,15 @@ package com.krypton.accountservice.controller;
 
 import com.krypton.accountservice.model.AuthResponse;
 import com.krypton.accountservice.service.AccountService;
-import com.krypton.accountservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-public class UserAccountController extends MainController
+public class AccountController extends MainController
 {
     private final AccountService accountService;
-    private final UserService userService;
 
     @PostMapping(value = "/register", params = {"nick", "email", "password"})
     public AuthResponse register(@RequestParam String nick, @RequestParam String email, @RequestParam String password)
@@ -39,6 +37,4 @@ public class UserAccountController extends MainController
                 .status(HttpStatus.BAD_REQUEST)
                 .build();
     }
-
-
 }
