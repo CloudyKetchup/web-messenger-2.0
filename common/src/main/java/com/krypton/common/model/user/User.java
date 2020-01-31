@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString(exclude = {"rooms", "friends", "friendRequests"})
+@ToString(exclude = {"friends", "friendRequests"})
 @Entity
 @Table(name = "chat_user")
 public class User extends BaseEntity
@@ -31,10 +31,6 @@ public class User extends BaseEntity
     private Image profileImage;
 
     private UserStatus status = UserStatus.OFFLINE;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Room> rooms = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_friends",
