@@ -3,18 +3,107 @@ import ProfileContext from "../context/ProfileContext";
 import { Room } from "../model/Room";
 import { User } from "../model/User";
 import { FriendRequest } from "../model/request/FriendRequest";
+import { AuthReponse } from "../model/AuthResponse";
 
-import { AppContextHelpers } from "./AppContextHelpers";
+import { AccountClient } from "../api/AccountClient";
+
+import { FriendRequestComponentContext } from "../util/FriendRequestComponentContext";
+import { LeftPanelComponentContext } from "../util/LeftPanelComponentContext";
+
+/**
+ * A model similar to {@link ProfileContext} except that profile
+ * have type of {@link User | null} instead of {@link User}
+ */
+type ProfileContextLike = {
+  profile : User | null
+  rooms   : Room[]
+  friends : User[]
+  friendRequests : FriendRequest[]
+};
 
 export class ProfileContextHelpers
 {
   static profileContext : ProfileContext | null = null;
 
   /**
-   * Creates profile context and accepts components for rerender on context update
+   * Builder class for easy context creation
+   */
+  static Builder = class
+  {
+    private instance : ProfileContextLike = {
+      profile : null,
+      rooms   : [],
+      friends : [],
+      friendRequests : []
+    };
+
+    rooms = (rooms : Room[]) =>
+    {
+      this.instance.rooms = rooms;
+
+      return this;
+    };
+
+    friends = (friends : User[]) =>
+    {
+      this.instance.friends = friends;
+
+      return this;
+    };
+
+    friendRequests = (friendRequests : FriendRequest[]) =>
+    {
+      this.instance.friendRequests = friendRequests;
+
+      return this;
+    };
+
+    /**
+     * Build context
+     * 
+     * @param user    {@link User}
+     * @return {ProfileContext}
+     */
+    build = (user : User) : ProfileContext =>
+    {
+      this.instance.profile = user;
+
+      return this.instance as ProfileContext;
+    };
+  }
+
+  /**
+   * Create context based on result from authentication request
+   * 
+   * @param result    result from api {@link AuthReponse}
+   * @param fallback  function called if not authenticated
+   * @param callback  optional function called on success
+   */
+  static createBasedOnAuth = async (result : AuthReponse, fallback : (result : AuthReponse) => void, callback? : () => void) =>
+  {
+    if (result && result.status === "OK" && result.account)
+    {
+      const friends         = AccountClient.getFriends(result.account.id);
+      const rooms           = AccountClient.getRooms(result.account.id);
+      const friendRequests  = AccountClient.getFriendRequests(result.account.id)
+
+      const profile = new ProfileContextHelpers.Builder()
+        .friends(await friends)
+        .rooms(await rooms)
+        .friendRequests(await friendRequests)
+        .build(result.account);
+
+      ProfileContextHelpers.createContext(profile);
+
+      callback && callback();
+    }
+    else fallback(result);
+  };
+
+  /**
+   * Creates profile context
    * 
    * @param context     {@link ProfileContext} context
-   * @param components  {@link Component}'s for rerender
    */
   static createContext = (context : ProfileContext) => ProfileContextHelpers.profileContext = context;
 
@@ -32,7 +121,7 @@ export class ProfileContextHelpers
   };
 
   /**
-   * Add a frient to friends list from profile
+   * Add a friend to friends list from profile
    * 
    * @param friend  {@link User}
    */
@@ -42,17 +131,22 @@ export class ProfileContextHelpers
     {
       ProfileContextHelpers.profileContext.friends.push(friend);
 
-      AppContextHelpers.updateFriendsList(ProfileContextHelpers.profileContext.friends);
+      LeftPanelComponentContext.getInstance().updateFriendsList(ProfileContextHelpers.profileContext.friends);
     }
   };
 
+  /**
+   * Add friend request to list
+   * 
+   * @param request     {@link FriendRequest}
+   */
   static addFriendRequest = (request : FriendRequest) =>
   {
     if (ProfileContextHelpers.profileContext)
     {
       ProfileContextHelpers.profileContext.friendRequests.push(request);
 
-      AppContextHelpers.updateFriendRequestsLists(ProfileContextHelpers.profileContext.friendRequests);
+      FriendRequestComponentContext.getInstance().updateFriendRequestsLists(ProfileContextHelpers.profileContext.friendRequests);
     }
   };
 

@@ -1,81 +1,50 @@
-import { Component } from "react";
-
 import RoomContext from "../context/RoomContext";
 
 import { ProfileContextHelpers as Profile } from "./ProfileContextHelpers";
+import { AppContextHelpers } from "./AppContextHelpers";
 
-import { Room }     from "../model/Room";
+import { RoomComponentContext } from "../util/RoomComponetContext";
+
 import { Message }  from "../model/Message";
 
 export class RoomContextHelpers
 {
-  static context : RoomContext | null = null;
-  private static components : Component[] = [];
+  static context : RoomContext | undefined;
 
   /**
-   * Create room context, can also accept components for registration, see more info below
-   * at ,,components,, param
+   * Create room context
    * 
    * @param context     {@link RoomContext} object
-   * @param components  {@link Component}'s for registration see see {@see RoomContextHelpers.registerComponent} docs
    */
-  static createContext = (context : RoomContext, ...components : Component[]) =>
+  static createContext = (context : RoomContext) =>
   {
     RoomContextHelpers.context = context;
-    components.forEach(RoomContextHelpers.registerComponent);
   };
-
+  
   /**
-   * Register any component for to components list, those components can be updated
-   * on any context data update, used in methods below
+   * Update room context
    * 
-   * @param component   {@link Component} to be registered to list
+   * @param room    {@link RoomContext} for swaping
    */
-  static registerComponent = (component : Component) =>
+  static changeRoom = (room : RoomContext) =>
   {
-    const alreadyExists = () =>
-    {
-      RoomContextHelpers.components.forEach(c => {
-        if (c == component)
-          return true;
-      });
-      return false;
-    };
+    const roomContextWasNull = RoomContextHelpers.context === undefined;
 
-    !alreadyExists() && RoomContextHelpers.components.push(component);
-  };
+    RoomContextHelpers.createContext(room);
 
-  /**
-   * Change room data from context to given one
-   * 
-   * @param room    {@link Room} for swaping
-   */
-  static changeRoom = (room : Room) =>
-  {
-    if (RoomContextHelpers.context)
+    // TODO: get room messages
+
+    if (roomContextWasNull)
     {
-      RoomContextHelpers.context.data = room;
-      RoomContextHelpers.components.forEach(c => c.forceUpdate());
+      AppContextHelpers.refreshMainComponent();
+    } else
+    {
+      RoomComponentContext.getInstance().updateRoom(room);
     }
   };
 
   /**
-   * Get messages from room inside context, can return empty list, see details below
-   * 
-   * @return {Message} list or empty list if context or context data is null
-   */
-  static getCurrentRoomMessages = () : Message[] =>
-  {
-    if (RoomContextHelpers.context?.data)
-    {
-      return RoomContextHelpers.context.data.messages;
-    }
-    return [];
-  };
-
-  /**
-   * Add a message to room from profile and assign this room again to context data,
-   * basically we add message to current selected room
+   * Add message to context
    * 
    * @param message   {@link Message}
    */
@@ -93,7 +62,7 @@ export class RoomContextHelpers
         // assign room from profile to context data
         RoomContextHelpers.context.data = room;
 
-        RoomContextHelpers.components.forEach(c => c.forceUpdate());
+        RoomComponentContext.getInstance().updateMessages(RoomContextHelpers.context.data.messages);
       }
     }
   };

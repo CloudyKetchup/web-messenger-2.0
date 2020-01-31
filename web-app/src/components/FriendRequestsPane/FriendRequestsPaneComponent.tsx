@@ -4,8 +4,9 @@ import { FriendRequest } from "../../model/request/FriendRequest";
 
 import { FriendRequestComponent } from "../FriendRequestComponent/FriendRequestComponent";
 
+import { FriendRequestComponentContext } from "../../util/FriendRequestComponentContext";
+
 import "./friend-requests-pane-component.css";
-import { AppContextHelpers } from "../../helpers/AppContextHelpers";
 
 type IProps = {
   requests : FriendRequest[]
@@ -23,10 +24,7 @@ export default class FriendRequestsPaneComponent extends Component<IProps, IStat
   }
   div : HTMLElement | undefined;
 
-  componentDidMount = () =>
-  {
-    AppContextHelpers.registerComponent(this);
-  };
+  componentDidMount = () => FriendRequestComponentContext.getInstance().registerComponent(this);
   
   close = () =>
   {

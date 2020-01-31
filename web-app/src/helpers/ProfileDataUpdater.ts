@@ -1,7 +1,9 @@
 import { AccountClient } from "../api/AccountClient";
 
 import { ProfileContextHelpers as Profile } from "./ProfileContextHelpers";
-import { AppContextHelpers } from "./AppContextHelpers";
+
+import { FriendRequestComponentContext } from "../util/FriendRequestComponentContext";
+import { LeftPanelComponentContext } from "../util/LeftPanelComponentContext";
 
 export class ProfileDataUpdater
 {
@@ -24,7 +26,7 @@ export class ProfileDataUpdater
     {
       Profile.profileContext.friends = await AccountClient.getFriends(id);
 
-      AppContextHelpers.updateFriendsList(Profile.profileContext.friends);
+      LeftPanelComponentContext.getInstance().updateFriendsList(Profile.profileContext.friends);
     }
   };
 
@@ -42,7 +44,7 @@ export class ProfileDataUpdater
     {
       Profile.profileContext.friendRequests = await AccountClient.getFriendRequests(id);
 
-      AppContextHelpers.updateFriendRequestsLists(Profile.profileContext.friendRequests);
+      FriendRequestComponentContext.getInstance().updateFriendRequestsLists(Profile.profileContext.friendRequests);
     }
   };
 };
