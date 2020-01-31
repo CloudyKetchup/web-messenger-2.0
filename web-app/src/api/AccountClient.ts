@@ -34,12 +34,19 @@ export class AccountClient
   (
     axios.get(`${URL}/get/rooms?id=${id}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(e => { console.log(e); return [] })
   );
 
   static getFriendRequests = (id : string) : Promise<FriendRequest[]> =>
   (
     axios.get(`${URL}/get/friend-requests?id=${id}`)
+      .then(response => response.data)
+      .catch(console.log)
+  );
+
+  static getFriendRoom = (id : string, friendId : string) : Promise<Room> =>
+  (
+    axios.get(`${URL}/get/room?userId=${id}&friendId=${friendId}`)
       .then(response => response.data)
       .catch(console.log)
   );
