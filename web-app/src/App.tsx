@@ -48,7 +48,7 @@ export default class App extends Component<IProps, IState>
 				&&
 				RoomContext.context.data
 				&&
-				<RoomComponent data={RoomContext.context.data}/>
+				<RoomComponent room={RoomContext.context}/>
 			}
 			<Switch>
 				<Route path={`${this.props.match.url}/search`} component={SearchComponent}/>
