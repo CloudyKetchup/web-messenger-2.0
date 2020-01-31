@@ -4,10 +4,11 @@ import { Link, match } from "react-router-dom";
 
 import ListUserComponent from "../ListUserComponent/ListUserComponent";
 
+import { LeftPanelComponentContext } from "../../util/LeftPanelComponentContext";
+
 import { User } from "../../model/User";
 
-import "./list-panel-component.css";
-import { AppContextHelpers } from "../../helpers/AppContextHelpers";
+import "./left-panel-component.css";
 
 type IProps = {
 	friends : User[]
@@ -23,7 +24,7 @@ export default class LeftPanelComponent extends Component<IProps> {
 
 	componentDidMount = () =>
 	{
-		AppContextHelpers.registerComponent(this);
+		LeftPanelComponentContext.getInstance().registerComponent(this);
 	};
 
 	render = () => (
