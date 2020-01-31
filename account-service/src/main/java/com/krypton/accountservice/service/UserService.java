@@ -4,11 +4,13 @@ import com.krypton.accountservice.feign.UserFeignClient;
 import com.krypton.accountservice.model.SearchResultUser;
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
+import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,25 +20,38 @@ public class UserService
 {
   private UserFeignClient feignClient;
 
-  public Set<Room> getAllRooms(String id)
+  public Set<User> getAllFriendsAsUsers(String id)
   {
-    return feignClient.getRooms(id);
-  }
-
-  public Set<User> getAllFriends(UUID id)
-  {
-    var user = feignClient.find(id);
+    var user = feignClient.find(UUID.fromString(id));
 
     if (user.isPresent())
     {
-      return feignClient.getFriends(user.get().getId().toString());
+      return feignClient.getFriendsAsUsers(user.get().getId().toString());
     }
     return new HashSet<>();
+  }
+
+  public Set<Friend> getFriends(String id)
+  {
+    return feignClient.getFriends(id);
   }
 
   public Set<FriendRequest> getFriendRequests(String id)
   {
     return feignClient.getFriendRequests(id);
+  }
+
+  public Optional<Room> getRoomByFriend(UUID userId, UUID friendId)
+  {
+    final Room[] room = new Room[1];
+
+    feignClient.getFriends(userId.toString())
+      .parallelStream()
+      .filter(f -> f.getTarget().getId().equals(friendId))
+      .findFirst()
+      .ifPresent(f -> room[0] = f.getRoom());
+
+    return Optional.ofNullable(room[0]);
   }
 
   public Set<SearchResultUser> search(String query, User account)
@@ -56,7 +71,7 @@ public class UserService
 
   public boolean areFriends(User user1, User user2)
   {
-    var user1Friends = feignClient.getFriends(user1.getId().toString());
+    var user1Friends = feignClient.getFriendsAsUsers(user1.getId().toString());
 
     return user1Friends.parallelStream().anyMatch(friend -> friend.getId().equals(user2.getId()));
   }

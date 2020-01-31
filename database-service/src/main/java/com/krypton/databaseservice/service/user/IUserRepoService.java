@@ -2,6 +2,7 @@ package com.krypton.databaseservice.service.user;
 
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
+import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
 import com.krypton.databaseservice.service.IModelService;
 
@@ -16,13 +17,14 @@ public interface IUserRepoService extends IModelService<User, UUID>
 
     Optional<User> findByEmail(String email);
 
-    Set<User> getFriends(UUID id);
+    Set<Friend> getFriends(String id);
 
-    Set<Room> getRooms(UUID id);
+    Set<User> getFriendsAsUsers(UUID id);
 
     Set<User> search(@NotBlank  String query);
 
     void addFriendRequest(FriendRequest request);
 
     Set<FriendRequest> getFriendRequests(UUID id);
+
 }

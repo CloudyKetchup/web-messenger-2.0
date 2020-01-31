@@ -2,6 +2,7 @@ package com.krypton.databaseservice.service.user;
 
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
+import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
 import com.krypton.databaseservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,17 @@ public class UserRepoService implements IUserRepoService
     public Optional<User> findByEmail(String email)
     {
         return repository.findByEmail(email);
+    }
+
+    @Override
+    public Set<Friend> getFriends(String id) {
+        var user = find(UUID.fromString(id));
+
+        if (user.isPresent())
+        {
+            return user.get().getFriends();
+        }
+        return new HashSet<>();
     }
 
     @Override
@@ -59,7 +71,7 @@ public class UserRepoService implements IUserRepoService
     }
 
     @Override
-    public Set<User> getFriends(UUID id)
+    public Set<User> getFriendsAsUsers(UUID id)
     {
         var user = find(id);
         var friends = new HashSet<User>();
@@ -67,18 +79,6 @@ public class UserRepoService implements IUserRepoService
         user.ifPresent(value -> value.getFriends().forEach(friend -> friends.add(friend.getTarget())));
 
         return friends;
-    }
-
-    @Override
-    public Set<Room> getRooms(UUID id)
-    {
-        var user = find(id);
-
-        if (user.isPresent())
-        {
-            return user.get().getRooms();
-        }
-        return new HashSet<>();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.krypton.databaseservice.controller;
 
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
+import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
 import com.krypton.databaseservice.service.user.IUserRepoService;
 import org.springframework.web.bind.annotation.*;
@@ -35,15 +36,15 @@ public class UserController extends EntityController<User, UUID>
     }
 
     @GetMapping("/get/friends")
-    public Set<User> getFriends(@RequestParam String id)
+    public Set<Friend> getFriends(@RequestParam String id)
     {
-        return userRepoService.getFriends(UUID.fromString(id));
+        return userRepoService.getFriends(id);
     }
 
-    @GetMapping("/get/rooms")
-    public Set<Room> getRooms(@RequestParam String id)
+    @GetMapping("/get/friends-as-users")
+    public Set<User> getFriendsAsUsers(@RequestParam String id)
     {
-        return userRepoService.getRooms(UUID.fromString(id));
+        return userRepoService.getFriendsAsUsers(UUID.fromString(id));
     }
 
     @GetMapping(value = "/search", params = "query")

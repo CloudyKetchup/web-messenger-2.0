@@ -2,7 +2,7 @@ package com.krypton.accountservice.feign;
 
 import com.krypton.accountservice.config.FeignConfig;
 import com.krypton.common.model.request.FriendRequest;
-import com.krypton.common.model.room.Room;
+import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +30,10 @@ public interface UserFeignClient
     Optional<User> findByEmail(@RequestParam("email") String email);
 
     @GetMapping("/get/friends")
-    Set<User> getFriends(@RequestParam String id);
+    Set<Friend> getFriends(@RequestParam String id);
 
-    @GetMapping("/get/rooms")
-    Set<Room> getRooms(@RequestParam String id);
+    @GetMapping("/get/friends-as-users")
+    Set<User> getFriendsAsUsers(@RequestParam String id);
 
     @GetMapping(value = "/search", params = "query")
     Set<User> search(@RequestParam String query);
