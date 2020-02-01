@@ -10,6 +10,8 @@ import { AccountClient } from "../api/AccountClient";
 import { FriendRequestComponentContext } from "../util/FriendRequestComponentContext";
 import { LeftPanelComponentContext } from "../util/LeftPanelComponentContext";
 
+import * as CookieManager from "../util/cookie/CookieManager";
+
 /**
  * A model similar to {@link ProfileContext} except that profile
  * have type of {@link User | null} instead of {@link User}
@@ -81,6 +83,8 @@ export class ProfileContextHelpers
    */
   static createBasedOnAuth = async (result : AuthReponse, fallback : (result : AuthReponse) => void, callback? : () => void) =>
   {
+    CookieManager.deleteProfile();
+
     if (result && result.status === "OK" && result.account)
     {
       const friends         = AccountClient.getFriends(result.account.id);
@@ -94,6 +98,8 @@ export class ProfileContextHelpers
         .build(result.account);
 
       ProfileContextHelpers.createContext(profile);
+
+      CookieManager.saveProfile(profile);
 
       callback && callback();
     }

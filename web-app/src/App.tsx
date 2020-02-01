@@ -14,10 +14,13 @@ import { AccountSocketClient } from "./api/AccountSocketClient";
 
 import { Switch, Route, match } from 'react-router';
 
+import { History } from "history";
+
 import './index.css';
 
 type IProps = {
 	match : match
+	history : History
 };
 
 type IState = {
@@ -32,6 +35,10 @@ export default class App extends Component<IProps, IState>
 
 	componentDidMount = () =>
 	{
+		if (!Profile.profileContext)
+		{
+			this.props.history.push("/login");
+		}
 		AppContext.createContext({ roomSelected : null }, this);
 
 		MessagingClient.init();

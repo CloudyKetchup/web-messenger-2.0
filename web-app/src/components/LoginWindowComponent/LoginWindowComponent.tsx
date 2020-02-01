@@ -31,7 +31,7 @@ export const LoginWindowComponent : FC<{ history : History }> = props =>
       {
         console.log("not logged in", result);
       },
-      () => props.history.push("/chat"));
+			() => props.history.push("/chat"));
   };
 
   return (

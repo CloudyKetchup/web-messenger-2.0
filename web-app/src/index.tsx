@@ -9,10 +9,24 @@ import { ProfileContextHelpers as Profile } from './helpers/ProfileContextHelper
 
 import { Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 
-import './index.css';
+import * as CookieManager from "./util/cookie/CookieManager";
+
 import * as serviceWorker from './serviceWorker';
 
-export default class AppWrapper extends Component {
+import './index.css';
+
+export default class AppWrapper extends Component
+{
+
+  UNSAFE_componentWillMount = () =>
+  {
+    const profile = CookieManager.loadProfile();
+
+    if (profile !== null)
+    {
+      Profile.createContext(profile);
+    };
+  };
 
   render = () => (
     <Router>
