@@ -35,4 +35,11 @@ public class ChatMessage extends BaseEntity
         this.author = author;
         this.time = DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.now());
     }
+
+    public ChatMessage(String text, User author, Long time)
+    {
+        this.text = text;
+        this.author = author;
+        this.time = time.toString();
+    }
 }

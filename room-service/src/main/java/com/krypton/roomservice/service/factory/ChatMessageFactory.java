@@ -19,6 +19,6 @@ public class ChatMessageFactory
   {
     var user = userFeignClient.find(UUID.fromString(messageBody.getAuthorId()));
 
-    return user.map(value -> new ChatMessage(messageBody.getText(), value));
+    return user.map(value -> new ChatMessage(messageBody.getText(), value, messageBody.getTime()));
   }
 }
