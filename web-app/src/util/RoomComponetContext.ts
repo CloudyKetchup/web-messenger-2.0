@@ -29,8 +29,8 @@ export class RoomComponentContext extends ComponentContext
 
   updateMessages = (messages : Message[]) =>
   {
-    const roomChatComponent = this.components.filter(c => c instanceof RoomChatComponent)[0];
+    const roomChatComponent = this.components.filter(c => c instanceof RoomChatComponent)[0] as RoomChatComponent;
 
-    roomChatComponent && roomChatComponent.setState({ messages : messages });
+    roomChatComponent && roomChatComponent.setState({ messages : messages }, roomChatComponent.scrollBottom);
   };
 };
