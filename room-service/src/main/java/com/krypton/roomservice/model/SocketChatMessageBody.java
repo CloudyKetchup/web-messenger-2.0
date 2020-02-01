@@ -11,7 +11,7 @@ public class SocketChatMessageBody
 {
   private String text;
   private String authorId;
-  private String time;
+  private Long time;
 
   public SocketChatMessageBody() {}
 }
