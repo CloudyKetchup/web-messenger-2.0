@@ -20,9 +20,9 @@ public class UserService
 {
   private UserFeignClient feignClient;
 
-  public Set<User> getAllFriendsAsUsers(String id)
+  public Set<User> getAllFriendsAsUsers(UUID id)
   {
-    var user = feignClient.find(UUID.fromString(id));
+    var user = feignClient.find(id);
 
     if (user.isPresent())
     {
@@ -31,14 +31,27 @@ public class UserService
     return new HashSet<>();
   }
 
-  public Set<Friend> getFriends(String id)
+  public Set<Friend> getFriends(UUID id)
   {
-    return feignClient.getFriends(id);
+    return feignClient.getFriends(id.toString());
   }
 
-  public Set<FriendRequest> getFriendRequests(String id)
+  public Set<FriendRequest> getFriendRequests(UUID id)
   {
-    return feignClient.getFriendRequests(id);
+    return feignClient.getFriendRequests(id.toString());
+  }
+
+  public Set<Room> getRooms(UUID id)
+  {
+    var rooms = new HashSet<Room>();
+
+    getFriends(id)
+      .parallelStream()
+      .forEach(friend -> {
+        rooms.add(friend.getRoom());
+      });
+
+    return rooms;
   }
 
   public Optional<Room> getRoomByFriend(UUID userId, UUID friendId)

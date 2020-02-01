@@ -26,13 +26,19 @@ public class UserController extends MainController
   @GetMapping("/get/friends")
   public Set<User> getFriends(@RequestParam String id)
   {
-    return userService.getAllFriendsAsUsers(id);
+    return userService.getAllFriendsAsUsers(UUID.fromString(id));
   }
 
   @GetMapping("/get/friend-requests")
   public Set<FriendRequest> getFriendRequests(@RequestParam String id)
   {
-    return userService.getFriendRequests(id);
+    return userService.getFriendRequests(UUID.fromString(id));
+  }
+
+  @GetMapping("/get/rooms")
+  public Set<Room> getRooms(@RequestParam String id)
+  {
+    return userService.getRooms(UUID.fromString(id));
   }
 
   @GetMapping("/get/room")
