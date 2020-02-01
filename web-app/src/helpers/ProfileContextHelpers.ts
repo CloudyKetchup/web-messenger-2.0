@@ -86,7 +86,7 @@ export class ProfileContextHelpers
       const friends         = AccountClient.getFriends(result.account.id);
       const rooms           = AccountClient.getRooms(result.account.id);
       const friendRequests  = AccountClient.getFriendRequests(result.account.id)
-
+      
       const profile = new ProfileContextHelpers.Builder()
         .friends(await friends)
         .rooms(await rooms)
@@ -119,6 +119,16 @@ export class ProfileContextHelpers
       ProfileContextHelpers.profileContext?.rooms.push(room);
     }
   };
+
+	static updateRoom = (room : Room) =>
+	{
+		if (ProfileContextHelpers.profileContext)
+		{
+			const index = ProfileContextHelpers.profileContext.rooms.findIndex(r => r.id === room.id);
+		
+			ProfileContextHelpers.profileContext.rooms[index] = room;
+		}
+	};
 
   /**
    * Add a friend to friends list from profile
@@ -156,7 +166,7 @@ export class ProfileContextHelpers
    * @param id    {@link Room} id
    * @return {@link Room} or void if not found
    */
-  static findRoomById = (id : string) : Room | void =>
+  static findRoomById = (id : string) =>
   {
     return ProfileContextHelpers.profileContext?.rooms.filter(r => r.id === id)[0];
   };
