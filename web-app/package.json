@@ -25,6 +25,7 @@
     "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3",
     "typescript": "~3.7.2",
+    "universal-cookie": "^4.0.3",
     "websocket": "^1.0.31"
   },
   "scripts": {
