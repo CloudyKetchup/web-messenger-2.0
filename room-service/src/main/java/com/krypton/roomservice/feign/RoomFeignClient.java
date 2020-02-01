@@ -27,4 +27,7 @@ public interface RoomFeignClient
 
     @PutMapping("/message/add")
     Optional<ChatMessage> addMessage(@RequestBody ChatMessage message, @RequestParam String room);
+
+    @GetMapping("/get/messages")
+    Set<ChatMessage> getMessages(@RequestParam String room);
 }

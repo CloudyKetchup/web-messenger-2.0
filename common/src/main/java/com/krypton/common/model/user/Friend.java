@@ -1,6 +1,5 @@
 package com.krypton.common.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krypton.common.model.room.Room;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +25,6 @@ public class Friend
     private User target;
 
     @ManyToOne
-    @JsonIgnore
     private Room room;
 
     public Friend() {}

@@ -7,8 +7,11 @@ import com.krypton.databaseservice.service.message.IChatMessageRepoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -57,6 +60,27 @@ public class RoomRepoService implements IRoomRepoService
 		roomRepository.save(room);
 
 		return savedMessage;
+	}
+
+	@Override
+	public Set<ChatMessage> getMessages(UUID id) {
+		var room = find(id);
+
+		if (room.isPresent())
+		{
+			return room.get().getMessages();
+		}
+		return new HashSet<>();
+	}
+
+	@Override
+	public Stream<ChatMessage> getMessagesAsStream(UUID id) {
+		var room = find(id);
+
+		return room.map(value -> value.getMessages()
+			.stream()
+			.sorted((m1, m2) -> m1.getId().compareTo(m2.getId())))
+			.orElse(null);
 	}
 
 	@Override

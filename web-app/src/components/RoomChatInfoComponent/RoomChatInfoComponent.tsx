@@ -1,6 +1,8 @@
 import React, { Component, FC } from "react";
 
-import { Room } from "../../model/Room";
+import RoomContext from "../../context/RoomContext";
+
+import { RoomComponentContext } from "../../util/RoomComponetContext";
 
 import "./room-chat-info-component.css";
 
@@ -8,12 +10,17 @@ import UserSvg 		from "../../assets/user.svg";
 import DeleteChat from "../../assets/delete-message.svg";
 
 type IProps = {
-	data : Room
+	room : RoomContext
 };
 
 const Separator : FC = () => <div className="room-chat-info-separator"/>;
 
-export default class RoomChatInfoComponent extends Component<IProps> {
+export default class RoomChatInfoComponent extends Component<IProps>
+{
+	componentDidMount = () =>
+	{
+		RoomComponentContext.getInstance().registerComponent(this);
+	};
 
 	render = () => (
 		<div className="room-chat-info">
@@ -24,10 +31,10 @@ export default class RoomChatInfoComponent extends Component<IProps> {
 			<div className="room-chat-info-user">
 				<div>
 					<div id="room-chat-info-user-photo">
-						<img src={UserSvg}/>
+						<img src={UserSvg} alt=""/>
 					</div>
 					<div>
-						<span>Hideo Kojima</span>
+						<span>{this.props.room.user?.nick}</span>
 					</div>
 				</div>
 				<div>
@@ -43,7 +50,7 @@ export default class RoomChatInfoComponent extends Component<IProps> {
 					<span>Delete User</span>
 				</button>
 				<button>
-					<img src={DeleteChat}/>
+					<img src={DeleteChat} alt=""/>
 					<span>Delete Chat</span>
 				</button>
 			</div>

@@ -92,17 +92,16 @@ export class RegistrationWindowComponent extends Component<{ history : History }
 
     if (emailInput && nickInput && passwordInput)
     {
-      const result = await AccountClient.register(nickInput.value, emailInput.value, passwordInput.value);
+      const result = AccountClient.register(nickInput.value, emailInput.value, passwordInput.value);
 
-      if (result && result.status === "OK" && result.account)
-      {
-        Profile.createContext({
-          profile : result.account,
-          friends : await AccountClient.getFriends(result.account.id),
-          rooms   : await AccountClient.getRooms(result.account.id)
-        })
-        this.props.history.push("/chat");
-      }
+      Profile.createBasedOnAuth(
+        await result,
+        result =>
+        {
+          console.log("not registered", result);
+        },
+        () => this.props.history.push("/chat")
+      );        
     }
   };
   

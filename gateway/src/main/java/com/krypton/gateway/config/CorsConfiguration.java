@@ -28,7 +28,7 @@ public class CorsConfiguration
             if (isCorsRequest(request)) {
                 var response = ctx.getResponse();
                 var headers = response.getHeaders();
-//                headers.add("Access-Control-Allow-Origin", "http://localhost:3000");
+                headers.add("Access-Control-Allow-Origin", "http://localhost:3000");
                 headers.add("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
                 headers.add("Access-Control-Max-Age", "3600");
                 headers.add("Access-Control-Allow-Headers", "x-requested-with, authorization, Content-Type, Authorization, credential, X-XSRF-TOKEN" );

@@ -3,12 +3,14 @@ import React, { Component } from "react";
 import { User } from "../../model/User";
 import { Status } from "../../model/Status";
 
-import { AppContextHelpers as AppContext } from "../../helpers/AppContextHelpers";
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
 
 import { Room } from "../../model/Room";
 
+import { RoomContextHelpers } from "../../helpers/RoomContextHelpers";
+
 import "./list-user-component.css";
+import { AccountClient } from "../../api/AccountClient";
 
 type IProps = {
 	data : User
@@ -17,8 +19,6 @@ type IProps = {
 type IState = {
 	selected : boolean
 };
-
-let i = 0;
 
 export default class ListUserComponent extends Component<IProps> {
 	state : IState = {
@@ -42,25 +42,22 @@ export default class ListUserComponent extends Component<IProps> {
 	selectUser = async () => {
 		if (Profile.profileContext)
 		{
-			// TODO: work with backend
 			if (!this.room)
 			{
-				this.room = {
-					id: `${i++}`,
-					users: [this.props.data, Profile.profileContext.profile],
-					messages: [],
-					images: 0,
-					documents: 0,
-					group: false
-				};
+				this.room = await AccountClient.getFriendRoom(Profile.profileContext.profile.id, this.props.data.id);
 			}
-			if (!Profile.roomExist(this.room))
+			if (this.room)
 			{
-				Profile.addRoom(this.room);
-			}
-			const r = Profile.findRoomById(this.room.id);
+				const room = Profile.findRoomById(this.room.id);
 
-			r && AppContext.changeRoom(r);
+				!room && Profile.addRoom(this.room);
+
+				RoomContextHelpers.changeRoom({
+					data: this.room,
+					user: this.props.data,
+					stats: undefined // TODO: get stats from backend
+				});
+			}
 		}
 	};
 
@@ -70,7 +67,7 @@ export default class ListUserComponent extends Component<IProps> {
 				<div className="list-user-focus"/>
 				<div className="list-user-info">
 					<div className="list-user-photo">
-						<img src="https://images-na.ssl-images-amazon.com/images/I/31qu4ixHZ3L._SY355_.jpg"/>
+						<img src="https://images-na.ssl-images-amazon.com/images/I/31qu4ixHZ3L._SY355_.jpg" alt=""/>
 					</div>
 					<div className="list-user-nick">
 						<span style={{ color: this.state.selected ? "white" : "#a9a9a9" }}>

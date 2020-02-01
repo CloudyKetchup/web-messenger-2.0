@@ -1,54 +1,40 @@
-import { Component } from "react";
+import { RoomContextHelpers as RoomContext } from "./RoomContextHelpers";
 
 import AppContext from "../context/AppContext";
 
-import { Room }     from "../model/Room";
 import { Message }  from "../model/Message";
+import App from "../App";
 
-import { RoomContextHelpers as RoomContext } from "./RoomContextHelpers";
-
-export class AppContextHelpers {
-  static context : AppContext | null = null;  // context with app data for easier access from far away components
-  private static components : Component[];    // components that will be rerendered on context update
+//TODO: update documentation
+export class AppContextHelpers
+{
+  static context : AppContext | null = null;    // context with app data for easier access from far away components
+  private static component : App;
 
   /**
    * @param context     {@link AppContext} object
    * @param components  components for rerendering on context update
    */
-  static createContext = (context : AppContext, ...components : Component[]) => {
-    AppContextHelpers.context    = context;
-    AppContextHelpers.components = components;
+  static createContext = (context : AppContext, component : App) => {
+    AppContextHelpers.context = context;
+    AppContextHelpers.component = component;
   }
 
-  /**
-   * Updates selected room in context and updated components related to it
-   * 
-   * @param room  {@link Room} selected
-   */
-  static changeRoom = (room : Room) => {
-    if (!RoomContext.context)
-    {
-      RoomContext.createContext({
-        data  : room,
-        user  : undefined,
-        stats : undefined
-      });
-      AppContextHelpers.components.forEach(c => c.forceUpdate());
-    }
-    RoomContext.changeRoom(room);
-  };
+  static refreshMainComponent = () => AppContextHelpers.component.forceUpdate();
 
   /**
    * Send message to server side and after that depending on response,
-   * update update related room context
+   * update related room
    * 
    * @param message   {@link Message} objectk
    */
   static sendMessage = async (message : Message) => {
+    //TODO: fix that shit, more exactly do like in updateFriendsList method, you know what this means:))
     if (RoomContext.context?.data)
     {
       RoomContext.addMessage(message);
     }
-    AppContextHelpers.components.forEach(c => c.forceUpdate());
+    // TODO: fix
+    // AppContextHelpers.components.forEach(c => c.forceUpdate());
   };
 }

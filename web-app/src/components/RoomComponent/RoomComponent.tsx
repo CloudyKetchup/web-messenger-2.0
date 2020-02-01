@@ -3,26 +3,33 @@ import React, { Component } from "react";
 import RoomChatComponent 			from "../RoomChatComponent/RoomChatComponent";
 import RoomChatInfoComponent	from "../RoomChatInfoComponent/RoomChatInfoComponent";
 
-import { Room } from "../../model/Room";
+import RoomContext from "../../context/RoomContext";
 
-import { RoomContextHelpers as RoomContext } from "../../helpers/RoomContextHelpers";
+import { RoomComponentContext } from "../../util/RoomComponetContext";
 
 import "./room-component.css";
 
 type IProps = {
-	data : Room
+	room : RoomContext
 };
 
-export default class RoomComponent extends Component<IProps> {
+type IState = {
+	room : RoomContext
+};
+
+export default class RoomComponent extends Component<IProps, IState> {
+	state : IState = {
+		room : this.props.room
+	};
 
 	componentDidMount = () => {
-		RoomContext.registerComponent(this);
+		RoomComponentContext.getInstance().registerComponent(this);
 	}
 
 	render = () => (
 		<div className="room-component">
-			<RoomChatComponent data={this.props.data}/>
-			<RoomChatInfoComponent data={this.props.data}/>
+			<RoomChatComponent room={this.state.room}/>
+			<RoomChatInfoComponent room={this.state.room}/>
 		</div>
 	);
 }

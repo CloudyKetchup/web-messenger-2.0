@@ -50,3 +50,17 @@ input {
 	display: flex;
 	height: 100%;
 }
+
+#friend-requests-pane-toggle
+{
+  height: 40px;
+  width: 40px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  background: #181818;
+  position: absolute;
+  right: 0;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+}

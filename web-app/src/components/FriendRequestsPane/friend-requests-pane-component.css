@@ -1,0 +1,48 @@
+.friend-requests-pane
+{
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  background: whitesmoke;
+  animation-name: friend-requests-pane-appear;
+  animation-duration: 0.2s;
+}
+
+#friend-requests-list
+{
+  height: calc(100% - 50px);
+  display: grid;
+  grid-gap: 10px;
+  grid-auto-rows: min-content;
+}
+
+#friend-requests-pane-footer
+{
+  height: 50px;
+  margin-top: auto;
+  text-align: center;
+}
+
+#friend-requests-pane-footer button
+{
+  height: 50px;
+  width: 50px;
+  background: transparent;
+}
+
+@keyframes friend-requests-pane-appear
+{
+  from
+  {
+    right: -300px;
+    opacity: 0;
+  }
+  to
+  {
+    right: 0;
+    opacity: 1;
+  }
+}

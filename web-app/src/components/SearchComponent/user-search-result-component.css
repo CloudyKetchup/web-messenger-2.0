@@ -1,0 +1,52 @@
+.search-result-user
+{
+  height: 50px;
+  display: flex;
+}
+
+.search-user-picture
+{
+  background: white;
+  height: 40px;
+  width: 75px;
+  border-radius: 100px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.search-user-nick, .search-user-status-quote
+{
+  color: white;
+  line-height: 40px;
+  padding: 5px 10px;
+}
+
+.search-user-status-quote
+{
+  color: gray;
+  text-align: center;
+  width: -webkit-fill-available;
+}
+
+.search-user-friend-request-button
+{
+  border-radius: 2px;
+  width: 90px;
+  height: 30px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.search-user-friend-request-button > button
+{
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  background: transparent;
+  color: gray;
+}
+
+.search-user-friend-request-button > button:hover
+{
+  color: #42D285;
+}

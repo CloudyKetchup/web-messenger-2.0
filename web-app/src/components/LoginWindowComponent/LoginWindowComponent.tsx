@@ -23,19 +23,15 @@ export const LoginWindowComponent : FC<{ history : History }> = props =>
 
   const login = async (email : string, password : string) =>
   {
-    const result = await AccountClient.login(email, password);
+    const result = AccountClient.login(email, password);
 
-    console.log(result)
-
-    if (result && result.status === "OK" && result.account)
-    {
-      Profile.createContext({
-        profile : result.account,
-        friends : await AccountClient.getFriends(result.account.id),
-        rooms   : await AccountClient.getRooms(result.account.id)
-      });
-      props.history.push("/chat");
-    }
+    Profile.createBasedOnAuth(
+      await result,
+      result =>
+      {
+        console.log("not logged in", result);
+      },
+      () => props.history.push("/chat"));
   };
 
   return (
