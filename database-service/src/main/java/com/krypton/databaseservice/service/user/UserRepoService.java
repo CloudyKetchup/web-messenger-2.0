@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotBlank;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -30,8 +31,18 @@ public class UserRepoService implements IUserRepoService
     }
 
     @Override
-    public Set<Friend> getFriends(String id) {
-        var user = find(UUID.fromString(id));
+    public Stream<Friend> getFriendsAsStream(UUID id) {
+        var user = find(id);
+
+        return user.map(u -> u.getFriends()
+          .stream()
+          .sorted((f1, f2) -> f1.getId().compareTo(f2.getId())))
+          .orElse(null);
+    }
+
+    @Override
+    public Set<Friend> getFriends(UUID id) {
+        var user = find(id);
 
         if (user.isPresent())
         {
