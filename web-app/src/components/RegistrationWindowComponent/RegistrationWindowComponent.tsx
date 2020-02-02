@@ -6,6 +6,8 @@ import { AccountClient } from "../../api/AccountClient";
 
 import { History } from "history";
 
+import * as CookieManager from "../../util/cookie/CookieManager";
+
 import "../../css/animated-squares.css";
 
 export class RegistrationWindowComponent extends Component<{ history : History }>
@@ -100,8 +102,7 @@ export class RegistrationWindowComponent extends Component<{ history : History }
         {
           console.log("not registered", result);
         },
-        () => this.props.history.push("/chat")
-      );        
+        () => { CookieManager.saveCredentials(emailInput.value, passwordInput.value); this.props.history.push("/chat"); });
     }
   };
   

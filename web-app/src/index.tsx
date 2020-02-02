@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
+import { LoadingScreenComponent }       from "./components/LoadingScreen/LoadingScreenComponent";
 import { LoginWindowComponent }         from "./components/LoginWindowComponent/LoginWindowComponent";
 import { RegistrationWindowComponent }  from "./components/RegistrationWindowComponent/RegistrationWindowComponent";
 
@@ -17,18 +18,22 @@ import './index.css';
 
 export default class AppWrapper extends Component
 {
+  state = {
+    loading : true
+  };
 
-  UNSAFE_componentWillMount = () =>
+  componentDidMount = async () =>
   {
-    const profile = CookieManager.loadProfile();
+    await CookieManager.loadProfile();
 
-    if (profile !== null)
-    {
-      Profile.createContext(profile);
-    };
+    this.setState({ loading : false }, () => console.log(Profile.profileContext));
   };
 
   render = () => (
+    this.state.loading
+    ?
+    <LoadingScreenComponent/>
+    :
     <Router>
       <Switch>
         <Route exact path="/" component={() => <Redirect to={Profile.profileContext ? "/chat" : "/login"} />} />
