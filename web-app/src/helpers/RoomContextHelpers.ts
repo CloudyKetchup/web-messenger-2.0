@@ -1,7 +1,6 @@
 import RoomContext from "../context/RoomContext";
 
 import { ProfileContextHelpers as Profile } from "./ProfileContextHelpers";
-import { AppContextHelpers } from "./AppContextHelpers";
 
 import { RoomClient } from "../api/RoomClient";
 
@@ -27,8 +26,6 @@ export class RoomContextHelpers
 	 */
 	static changeRoom = async (room : RoomContext) =>
 	{
-		const roomContextWasNull = RoomContextHelpers.context === undefined;
-
 		if (room.data)
 		{
 			room.data.messages = await RoomClient.getMessages(room.data.id);
@@ -39,13 +36,7 @@ export class RoomContextHelpers
 
 			RoomContextHelpers.createContext(room);
 
-			if (roomContextWasNull)
-			{
-				AppContextHelpers.refreshMainComponent();
-			} else
-			{
-				RoomComponentContext.getInstance().updateRoom(room);
-			}
+			RoomComponentContext.getInstance().updateRoom(room);
 		}
 	};
 
