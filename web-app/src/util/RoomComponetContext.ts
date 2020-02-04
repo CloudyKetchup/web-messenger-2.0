@@ -10,6 +10,8 @@ import RoomChatComponent from "../components/RoomChatComponent/RoomChatComponent
 export class RoomComponentContext extends ComponentContext
 {
   private static instance : RoomComponentContext;
+  private static roomChatComponent : RoomChatComponent;
+  private static roomComponent : RoomComponent;
 
   static getInstance = () : RoomComponentContext =>
   {
@@ -22,15 +24,46 @@ export class RoomComponentContext extends ComponentContext
 
   updateRoom = (room: RoomContext) =>
   {
-    const roomComponent = this.components.filter(c => c instanceof RoomComponent)[0];
+    const setState = () =>
+    {
+      RoomComponentContext.roomComponent.setState({ empty : false, room : room });
+    };
 
-    roomComponent && roomComponent.setState({ room : room });
+    if (RoomComponentContext.roomComponent)
+    {
+      setState();
+      return;
+    } else
+    {
+      const roomComponent = this.components.filter(c => c instanceof RoomComponent)[0] as RoomComponent;
+
+      if (roomComponent)
+      {
+        RoomComponentContext.roomComponent = roomComponent;
+
+        setState();
+      }
+    }
   };
 
   updateMessages = (messages : Message[]) =>
   {
-    const roomChatComponent = this.components.filter(c => c instanceof RoomChatComponent)[0] as RoomChatComponent;
+    const roomChatComponent = RoomComponentContext.roomChatComponent;
 
-    roomChatComponent && roomChatComponent.setState({ messages : messages }, roomChatComponent.scrollBottom);
+    if (roomChatComponent)
+    {
+      roomChatComponent.setState({ messages: messages }, roomChatComponent.scrollBottom);
+      return;
+    } else
+    {
+      const roomChatComponent = this.components.filter(c => c instanceof RoomChatComponent)[0] as RoomChatComponent;
+
+      if (roomChatComponent)
+      {
+        RoomComponentContext.roomChatComponent = roomChatComponent;
+
+        roomChatComponent.setState({ messages: messages }, roomChatComponent.scrollBottom);
+      }
+    }
   };
 };
