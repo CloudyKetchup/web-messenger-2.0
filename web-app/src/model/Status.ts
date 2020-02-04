@@ -1,5 +1,5 @@
 export enum Status {
-	ONLINE = "online",
-	OFFLINE = "offline",
-	DO_NOT_DISTURB = "do_not_disturb"
+	ONLINE = "ONLINE",
+	OFFLINE = "OFFLINE",
+	DO_NOT_DISTURB = "DO_NOT_DISTURB"
 }
