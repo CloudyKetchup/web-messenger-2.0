@@ -9,6 +9,7 @@ import { AccountClient } from "../api/AccountClient";
 
 import { FriendRequestComponentContext } from "../util/FriendRequestComponentContext";
 import { LeftPanelComponentContext } from "../util/LeftPanelComponentContext";
+import { MessagingClient } from "../api/MessagingClient";
 
 /**
  * A model similar to {@link ProfileContext} except that profile
@@ -117,6 +118,8 @@ export class ProfileContextHelpers
     if (!ProfileContextHelpers.roomExist(room))
     {
       ProfileContextHelpers.profileContext?.rooms.push(room);
+
+      MessagingClient.getInstance().subscribeRoom(room);
     }
   };
 
@@ -142,6 +145,13 @@ export class ProfileContextHelpers
       ProfileContextHelpers.profileContext.friends.push(friend);
 
       LeftPanelComponentContext.getInstance().updateFriendsList(ProfileContextHelpers.profileContext.friends);
+
+      // get room for that friend and add it to context
+      AccountClient.getFriendRoom(ProfileContextHelpers.profileContext.profile.id, friend.id)
+        .then(room =>
+        {
+          room && ProfileContextHelpers.addRoom(room);
+        });
     }
   };
 
