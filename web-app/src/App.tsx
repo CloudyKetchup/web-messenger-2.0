@@ -50,13 +50,7 @@ export default class App extends Component<IProps, IState>
 	render = () => (
 		<div className="main-container">
 			<LeftPanelComponent friends={Profile.profileContext?.friends || []} match={this.props.match}/>
-			{
-				RoomContext.context
-				&&
-				RoomContext.context.data
-				&&
-				<RoomComponent room={RoomContext.context}/>
-			}
+			<RoomComponent room={RoomContext.context} />
 			<Switch>
 				<Route path={`${this.props.match.url}/search`} component={SearchComponent}/>
 			</Switch>
