@@ -14,41 +14,55 @@ export type MessageBody = {
 
 export class MessagingClient
 {
-	private static stomp : CompatClient;
+	private static instance : MessagingClient;
+	private stomp : CompatClient;
+	private URL = "localhost:8080";
 
-	static init = async () =>
+	constructor()
 	{
-		MessagingClient.stomp = Stomp.client("ws://localhost:8100/room/socket/messaging");
-		MessagingClient.stomp.debug = () => null;
+		this.stomp = Stomp.client(`ws://${this.URL}/room/socket/messaging`);
+	}
 
-		MessagingClient.stomp.activate();
+	static getInstance = () : MessagingClient =>
+	{
+		if (!MessagingClient.instance)
+		{
+			MessagingClient.instance = new MessagingClient();
+		}
+		return MessagingClient.instance;
+	};
+
+	init = async () =>
+	{
+		this.stomp.debug = () => null;
+
+		this.stomp.activate();
 
 		if (Profile.profileContext)
 		{
-			await MessagingClient.initMessageReceiver(...Profile.profileContext.rooms);
+			await this.initMessageReceiver(...Profile.profileContext.rooms);
 		}
 	};
 
-	private static initMessageReceiver = async (...rooms : Room[]) =>
+	private initMessageReceiver = async (...rooms : Room[]) =>
 	{
-		MessagingClient.stomp.onConnect = () =>
-		{
-			rooms.forEach(async room =>
-				{
-					MessagingClient.stomp.subscribe(`/c/message/receive/room/${room.id}`, response =>
-						{
-							MessagingClient.recieveMessage(JSON.parse(response.body) as Message, room);
-						});
-				});
-		};
+		this.stomp.onConnect = () => rooms.forEach(this.subscribeRoom);
 	};
 
-	static sendMessage = async (message : MessageBody, roomId : string) =>
+	subscribeRoom = (room : Room) =>
 	{
-		MessagingClient.stomp.send(`/app/message/add/room/${roomId}`, {}, JSON.stringify(message));
+		this.stomp.subscribe(`/c/message/receive/room/${room.id}`, response =>
+		{
+			this.recieveMessage(JSON.parse(response.body) as Message, room);
+		});
+	};
+
+	sendMessage = async (message : MessageBody, roomId : string) =>
+	{
+		this.stomp.send(`/app/message/add/room/${roomId}`, {}, JSON.stringify(message));
 	}
 
-	private static recieveMessage = (message : Message, room : Room) =>
+	private recieveMessage = (message : Message, room : Room) =>
 	{
 		if (RoomContextHelpers.context?.data?.id === room.id)
 		{
@@ -56,9 +70,9 @@ export class MessagingClient
 		}
 		else
 		{
-			MessagingClient.getNotification(message);
+			this.getNotification(message);
 		}
 	};
 
-	private static getNotification = (message : Message) => console.log(message + "\n");
+	private getNotification = (message : Message) => console.log(message + "\n");
 }

@@ -88,7 +88,7 @@ export default class RoomChatComponent extends Component<IProps, IState>
 					authorId : Profile.profileContext.profile.id
 				};
 
-				await MessagingClient.sendMessage(messageBody, this.props.room.data.id)
+				await MessagingClient.getInstance().sendMessage(messageBody, this.props.room.data.id)
 
 				input.value = "";
 			}

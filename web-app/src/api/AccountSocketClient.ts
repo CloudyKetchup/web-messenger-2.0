@@ -1,4 +1,4 @@
-import { Stomp, CompatClient, messageCallbackType, IMessage } from "@stomp/stompjs";
+import { Stomp, CompatClient, IMessage } from "@stomp/stompjs";
 
 import { ProfileContextHelpers as Profile } from "../helpers/ProfileContextHelpers";
 
@@ -7,30 +7,44 @@ import { FriendRequest } from "../model/request/FriendRequest";
 
 export class AccountSocketClient
 {
-  private static stomp : CompatClient;
+  private static instance : AccountSocketClient;
+  private stomp : CompatClient;
 
-  static init = async () =>
+  constructor()
   {
-      AccountSocketClient.stomp = Stomp.client("ws://localhost:8300/user-service/socket");
-      AccountSocketClient.stomp.debug = () => null;
+    this.stomp = Stomp.client("ws://localhost:8300/user-service/socket");
+  }
 
-      AccountSocketClient.stomp.activate();
-      AccountSocketClient.initMessageReceiver();
+  static getInstance = () : AccountSocketClient =>
+  {
+    if (!AccountSocketClient.instance)
+    {
+      AccountSocketClient.instance = new AccountSocketClient();
+    }
+    return AccountSocketClient.instance;
   };
 
-  static initMessageReceiver = () =>
+  init = () =>
   {
-    AccountSocketClient.stomp.onConnect = () =>
+    this.stomp.debug = () => null;
+
+    this.stomp.activate();
+    this.initMessageReceiver();
+  };
+
+  initMessageReceiver = () =>
+  {
+    this.stomp.onConnect = () =>
     {
       if (Profile.profileContext)
       {
-        AccountSocketClient.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/new-friend`, AccountSocketClient.recieveNewFriend);
-        AccountSocketClient.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/friend-request`, AccountSocketClient.receiveFriendRequest);
+        this.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/new-friend`, this.recieveNewFriend);
+        this.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/friend-request`, this.receiveFriendRequest);
       }
     };
   };
 
-  private static recieveNewFriend = (response : IMessage) => Profile.addFriend(JSON.parse(response.body) as User);
+  private recieveNewFriend = (response : IMessage) => Profile.addFriend(JSON.parse(response.body) as User);
 
-  private static receiveFriendRequest = (response : IMessage) => Profile.addFriendRequest(JSON.parse(response.body) as FriendRequest);
+  private receiveFriendRequest = (response : IMessage) => Profile.addFriendRequest(JSON.parse(response.body) as FriendRequest);
 }

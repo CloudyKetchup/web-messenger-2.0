@@ -41,8 +41,8 @@ export default class App extends Component<IProps, IState>
 		}
 		AppContext.createContext({ roomSelected : null }, this);
 
-		MessagingClient.init();
-		AccountSocketClient.init();
+		MessagingClient.getInstance().init();
+		AccountSocketClient.getInstance().init();
 	};
 
 	toggleFriendRequestsPane = () => this.setState({ friendRequestsPane : !this.state.friendRequestsPane });
