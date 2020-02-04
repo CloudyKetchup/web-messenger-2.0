@@ -42,6 +42,9 @@ export default class ListUserComponent extends Component<IProps> {
 	selectUser = async () => {
 		if (Profile.profileContext)
 		{
+			// if room already selected stop;
+			if (this.room && this.room.id === RoomContextHelpers.context?.data?.id) return;
+
 			if (!this.room)
 			{
 				this.room = await AccountClient.getFriendRoom(Profile.profileContext.profile.id, this.props.data.id);
@@ -69,10 +72,17 @@ export default class ListUserComponent extends Component<IProps> {
 					<div className="list-user-photo">
 						<img src="https://images-na.ssl-images-amazon.com/images/I/31qu4ixHZ3L._SY355_.jpg" alt=""/>
 					</div>
-					<div className="list-user-nick">
-						<span style={{ color: this.state.selected ? "white" : "#a9a9a9" }}>
-							{this.props.data.nick}
-						</span>
+					<div>
+						<div className="list-user-nick">
+							<span style={{ color : this.state.selected ? "white" : "#a9a9a9", fontSize : 15 }}>
+								{this.props.data.nick}
+							</span>
+						</div>
+						<div className="list-user-last-message">
+							<span style={{ color : "gray", fontSize : 13, marginLeft : 5 }}>
+								Last message
+							</span>
+						</div>
 					</div>
 					<div className="list-user-status">
 						<div style={{ background : this.statusColor() }}/>
