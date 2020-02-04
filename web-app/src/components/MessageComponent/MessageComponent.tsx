@@ -6,32 +6,60 @@ import { Message } from "../../model/Message";
 
 import "./message-component.css";
 
-type IProps = {
-  data : Message
-};
+type IProps = { data : Message };
 
-type IState = {
-  time : Date
-};
+type IState = { time : Date };
 
-export default class MessageComponent extends Component<IProps, IState> {
-  state : IState = {
-    time : new Date(this.props.data.time)
+export default class MessageComponent extends Component<IProps, IState>
+{
+  state : IState = { time : new Date(0) };
+
+  fromProfile : boolean = false;
+
+  UNSAFE_componentWillMount = () =>
+  {
+    this.fromProfile = Profile.profileContext?.profile.id === this.props.data.author.id;
   };
 
-  messageStyle = () : CSSProperties => {
-    if (Profile.profileContext?.profile.id === this.props.data.author.id) {
+  componentDidMount = () =>
+  {
+    const date = new Date(0);
+
+    date.setUTCSeconds(this.props.data.time);
+
+    this.setState({ time : date });
+  };
+
+  messageStyle = () : CSSProperties =>
+  {
+    if (this.fromProfile)
+    {
       return {
-        background : "#6C6EA0",
+        background : "#858AE3",
         borderBottomRightRadius : 0,
         marginLeft : "auto"
       };
     }
     return {
       background : "#181818",
-      borderBottomLeftRadius: 0
+      borderBottomLeftRadius: 0,
+      animationName : "chat-message-left"
     };
-  }
+  };
+
+  textDiv = (style : CSSProperties = { wordBreak : "break-all" }) =>
+  (
+    <div style={style}>
+      <span>{this.props.data.text}</span>
+    </div>
+  );
+
+  timeDiv = (style? : CSSProperties) =>
+  (
+    <div id="chat-message-time" style={style}>
+      <span>{`${this.state.time.getHours()}:${this.state.time.getMinutes()}`}</span>
+    </div>
+  );
 
   render = () => (
     <div
@@ -39,12 +67,19 @@ export default class MessageComponent extends Component<IProps, IState> {
       id={`message-${this.props.data.id}`}
       style={this.messageStyle()}
     >
-      <div style={{ wordBreak : "break-all" }}>
-        <span>{this.props.data.text}</span>
-      </div>
-      <div>
-        <span>{`${this.state.time.getHours()}:${this.state.time.getMinutes()}`}</span>
-      </div>
+      {
+        this.fromProfile
+        ?
+        <>
+         {this.textDiv()}
+         {this.timeDiv({ marginLeft : 10 })}
+        </>
+        :
+        <>
+          {this.timeDiv({ marginRight : 10 })}
+          {this.textDiv()}
+        </>
+      }
     </div>
   );
 }

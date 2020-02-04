@@ -14,6 +14,8 @@ import MessageComponent from "../MessageComponent/MessageComponent";
 
 import { MessagingClient } from "../../api/MessagingClient";
 
+import SendIcon from "../../assets/send.svg";
+import PlusIcon from "../../assets/plus.svg";
 import "./room-chat-component.css";
 
 type IProps = { room : RoomContext };
@@ -86,8 +88,9 @@ export default class RoomChatComponent extends Component<IProps, IState>
 					authorId : Profile.profileContext.profile.id
 				};
 
-				MessagingClient.sendMessage(messageBody, this.props.room.data.id)
-					.then(() => input.value = "");
+				await MessagingClient.sendMessage(messageBody, this.props.room.data.id)
+
+				input.value = "";
 			}
 		}
 	};
@@ -107,9 +110,8 @@ export default class RoomChatComponent extends Component<IProps, IState>
 				}
 			</div>
 			<div className="room-chat-body">
-				<div className="chat-messages-container" style={{ overflow : "auto" }}>
-					{this.state.messages
-						.map(m => <MessageComponent key={m.id} data={m}/>)}
+				<div className="chat-messages-container" style={{ paddingTop : 10, overflow : "auto" }}>
+					{this.state.messages.map(message => <MessageComponent key={message.id} data={message}/>)}
 				</div>
 			</div>
 			<div className="room-chat-footer">
@@ -125,9 +127,13 @@ export default class RoomChatComponent extends Component<IProps, IState>
 							this.setState({ choosenImages : input?.files });
 						}}
 						multiple/>
-					<button onClick={this.chooseImages}><i className="fas fa-paperclip"/></button>
+					<button onClick={this.chooseImages}>
+						<img style={{ height : 20 }} src={PlusIcon} alt="..."/>
+					</button>
 					<input id={`room-${this.props.room.data?.id}-input`} placeholder="Your message..."/>
-					<button onClick={this.sendMessage}><i className="fas fa-paper-plane"/></button>
+					<button onClick={this.sendMessage}>
+						<img style={{ height : 35 }} src={SendIcon} alt="..."/>
+					</button>
 				</div>
 			</div>
 		</div>
