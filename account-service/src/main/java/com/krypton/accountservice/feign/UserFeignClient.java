@@ -4,6 +4,7 @@ import com.krypton.accountservice.config.FeignConfig;
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
+import com.krypton.common.model.user.UserStatus;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,9 @@ public interface UserFeignClient
 
     @GetMapping("/get/friends-as-users")
     Set<User> getFriendsAsUsers(@RequestParam String id);
+
+    @PostMapping("/update/status")
+    void setStatus(@RequestParam String id, @RequestParam UserStatus status);
 
     @GetMapping(value = "/search", params = "query")
     Set<User> search(@RequestParam String query);
