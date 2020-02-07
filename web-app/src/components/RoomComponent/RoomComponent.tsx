@@ -15,15 +15,13 @@ type IProps = {
 };
 
 type IState = {
-	empty 	: boolean
 	room? 	: RoomContext
 };
 
 export default class RoomComponent extends Component<IProps, IState>
 {
 	state : IState = {
-		empty 	: this.props.room === undefined,
-		room 		: this.props.room
+		room	: this.props.room
 	};
 
 	componentDidMount = () => RoomComponentContext.getInstance().registerComponent(this);
