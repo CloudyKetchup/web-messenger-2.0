@@ -3,7 +3,10 @@ package com.krypton.databaseservice.controller;
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.user.Friend;
 import com.krypton.common.model.user.User;
+import com.krypton.common.model.user.UserStatus;
 import com.krypton.databaseservice.service.user.IUserRepoService;
+import com.krypton.databaseservice.service.user.UserUpdater;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -16,11 +19,13 @@ import java.util.stream.Stream;
 public class UserController extends EntityController<User, UUID>
 {
     private final IUserRepoService userRepoService;
+    private final UserUpdater userUpdater;
 
-    public UserController(IUserRepoService service)
+    public UserController(IUserRepoService service, UserUpdater userUpdater)
     {
         super(service);
         this.userRepoService = service;
+        this.userUpdater = userUpdater;
     }
 
     @GetMapping(value = "/get", params = "nick")
@@ -45,6 +50,12 @@ public class UserController extends EntityController<User, UUID>
     public Set<User> getFriendsAsUsers(@RequestParam String id)
     {
         return userRepoService.getFriendsAsUsers(UUID.fromString(id));
+    }
+
+    @PostMapping("/update/status")
+    public void updateStatus(@RequestParam String id, @RequestParam UserStatus status)
+    {
+        userUpdater.setStatus(UUID.fromString(id), status);
     }
 
     @GetMapping(value = "/search", params = "query")
