@@ -16,6 +16,8 @@ import { Switch, Route, match } from 'react-router';
 
 import { History } from "history";
 
+import * as PageEvents from "./util/events/PageEvents";
+
 import './index.css';
 
 type IProps = {
@@ -43,6 +45,8 @@ export default class App extends Component<IProps, IState>
 
 		MessagingClient.getInstance().init();
 		AccountSocketClient.getInstance().init();
+
+		PageEvents.initExitListener();
 	};
 
 	toggleFriendRequestsPane = () => this.setState({ friendRequestsPane : !this.state.friendRequestsPane });
