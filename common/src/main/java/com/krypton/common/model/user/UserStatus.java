@@ -2,9 +2,9 @@ package com.krypton.common.model.user;
 
 public enum UserStatus
 {
-    ONLINE("Online"),
-    OFFLINE("Offline"),
-    DO_NOT_DISTURB("Do not disturb");
+    ONLINE("ONLINE"),
+    OFFLINE("OFFLINE"),
+    DO_NOT_DISTURB("DO_NOT_DISTURB");
 
     String type;
 
