@@ -83,7 +83,7 @@ export class ProfileContextHelpers
    * @param fallback  function called if not authenticated
    * @param callback  optional function called on success
    */
-  static createBasedOnAuth = async (result : AuthReponse, fallback? : (result : AuthReponse) => void, callback? : () => void) =>
+  static createBasedOnAuth = async (result : AuthReponse, fallback? : (result : AuthReponse) => void, callback? : (account : User) => void) =>
   {
     if (result && result.status === "OK" && result.account)
     {
@@ -99,7 +99,7 @@ export class ProfileContextHelpers
 
       ProfileContextHelpers.createContext(profile);
 
-      callback && callback();
+      callback && callback(result.account);
     }
     else fallback && fallback(result);
   };
