@@ -1,4 +1,4 @@
-package com.krypton.mediaservice.model;
+package com.krypton.common.model.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
