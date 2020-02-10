@@ -1,4 +1,4 @@
-package com.krypton.accountservice.config;
+package com.krypton.mediaservice.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
