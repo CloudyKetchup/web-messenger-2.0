@@ -3,15 +3,27 @@ import React, { Component } from "react";
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
 
 import { AccountClient } from "../../api/AccountClient";
+import { MediaClient } from "../../api/MediaClient";
 
 import { History } from "history";
 
 import * as CookieManager from "../../util/cookie/CookieManager";
 
 import "../../css/animated-squares.css";
+import { User } from "../../model/User";
 
-export class RegistrationWindowComponent extends Component<{ history : History }>
+type IState = {
+  profilePictureURL : string
+  profilePictureFile : File | null
+};
+
+export class RegistrationWindowComponent extends Component<{ history : History }, IState>
 {
+  state : IState = {
+    profilePictureURL : "https://www.xda-developers.com/files/2019/09/OP7T_1_4k.jpg",
+    profilePictureFile : null
+  };
+
   pictureOverlay : HTMLElement      | undefined;
   pictureIcon    : HTMLElement      | undefined;
   pictureChooser : HTMLInputElement | undefined;
@@ -67,19 +79,19 @@ export class RegistrationWindowComponent extends Component<{ history : History }
 
   swapPicture = async () =>
   {
-    const picture = document.getElementById("profile-picture") as HTMLImageElement;
-
-    if (picture && this.pictureChooser)
+    if (this.pictureChooser)
     {
       const pictureFile = this.pictureChooser.files;
 
       if (pictureFile)
       {
+        this.setState({ profilePictureFile : pictureFile[0] });
+        
         const fr = new FileReader();
 
         fr.onload = e =>
         {
-          picture.src = e.target?.result as string;
+          this.setState({ profilePictureURL : e.target?.result as string });
         };
         fr.readAsDataURL(pictureFile[0]);
       }
@@ -88,8 +100,8 @@ export class RegistrationWindowComponent extends Component<{ history : History }
 
   register = async () =>
   {
-    const emailInput = document.getElementById("registration-email-input") as HTMLInputElement;
-    const nickInput  = document.getElementById("registration-nick-input") as HTMLInputElement;
+    const emailInput    = document.getElementById("registration-email-input") as HTMLInputElement;
+    const nickInput     = document.getElementById("registration-nick-input") as HTMLInputElement;
     const passwordInput = document.getElementById("registration-password-input") as HTMLInputElement;
 
     if (emailInput && nickInput && passwordInput)
@@ -102,7 +114,24 @@ export class RegistrationWindowComponent extends Component<{ history : History }
         {
           console.log("not registered", result);
         },
-        () => { CookieManager.saveCredentials(emailInput.value, passwordInput.value); this.props.history.push("/chat"); });
+        async account =>
+        {
+          CookieManager.saveCredentials(emailInput.value, passwordInput.value);
+
+          this.setProfilePicture(account, () => console.log("error"), () => this.props.history.push("/chat"));
+        });
+    }
+  };
+
+  private setProfilePicture = async (account : User, fallback? : () => void, callback? : (result : any) => void) =>
+  {
+    if (this.state.profilePictureFile)
+    {
+      const image = await MediaClient.saveProfileImage(account.id, this.state.profilePictureFile);
+
+      const result = await AccountClient.setProfilePicture(account.id, image.id, fallback);
+
+      callback && callback(result);
     }
   };
   
@@ -119,7 +148,7 @@ export class RegistrationWindowComponent extends Component<{ history : History }
               >
                 <i id="profile-picture-icon" className="fas fa-image"/> 
               </div>
-              <img id="profile-picture" src="https://www.xda-developers.com/files/2019/09/OP7T_1_4k.jpg" alt="..."/>
+              <img id="profile-picture" src={this.state.profilePictureURL} alt="..."/>
             </div>
             <div className="form-pane-header-inputs">
               <input id="registration-email-input" placeholder="Email" type="email"/>
