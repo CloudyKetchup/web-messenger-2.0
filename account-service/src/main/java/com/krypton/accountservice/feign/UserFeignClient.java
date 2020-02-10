@@ -39,6 +39,9 @@ public interface UserFeignClient
     @PostMapping("/update/status")
     void setStatus(@RequestParam String id, @RequestParam UserStatus status);
 
+    @PostMapping("/update/profile-image")
+    void setProfileImage(@RequestParam String id, @RequestParam String imageId);
+
     @GetMapping(value = "/search", params = "query")
     Set<User> search(@RequestParam String query);
 

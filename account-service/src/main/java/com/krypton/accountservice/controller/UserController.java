@@ -9,10 +9,7 @@ import com.krypton.common.model.room.Room;
 import com.krypton.common.model.user.User;
 import com.krypton.common.model.user.UserStatus;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -55,6 +52,12 @@ public class UserController extends MainController
   public void setStatus(@RequestParam String id, @RequestParam String status)
   {
     userUpdater.setStatus(UUID.fromString(id), UserStatus.valueOf(status));
+  }
+
+  @PostMapping("/set/profile-image")
+  public void setProfileImage(@RequestParam String id, @RequestParam String imageId)
+  {
+    userUpdater.setProfileImage(id, imageId);
   }
 
   @GetMapping(value = "/search", params = "query")
