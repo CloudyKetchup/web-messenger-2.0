@@ -31,7 +31,13 @@ export default class RoomChatInfoComponent extends Component<IProps>
 			<div className="room-chat-info-user">
 				<div>
 					<div id="room-chat-info-user-photo">
-						<img src={UserSvg} alt=""/>
+						{
+							this.props.room.user?.profileImage?.id
+							?
+							<img src={`http://localhost:8080/image/get?id=${this.props.room.user.profileImage.id}`} alt="" />
+							:
+							<img src={UserSvg} alt=""/>
+						}
 					</div>
 					<div>
 						<span>{this.props.room.user?.nick}</span>
