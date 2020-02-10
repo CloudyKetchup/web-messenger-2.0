@@ -58,4 +58,11 @@ export class AccountClient
       .then(response => response.data)
       .catch(console.log)
   );
+
+  static setProfilePicture = (id : string, imageId : string, fallback? : () => void) =>
+  (
+    axios.post(`${URL}/set/profile-image?id=${id}&imageId=${imageId}`)
+      .then(response => response.data)
+      .catch(fallback)
+  );
 }
