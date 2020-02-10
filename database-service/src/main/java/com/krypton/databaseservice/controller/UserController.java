@@ -6,7 +6,6 @@ import com.krypton.common.model.user.User;
 import com.krypton.common.model.user.UserStatus;
 import com.krypton.databaseservice.service.user.IUserRepoService;
 import com.krypton.databaseservice.service.user.UserUpdater;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -56,6 +55,12 @@ public class UserController extends EntityController<User, UUID>
     public void updateStatus(@RequestParam String id, @RequestParam UserStatus status)
     {
         userUpdater.setStatus(UUID.fromString(id), status);
+    }
+
+    @PostMapping("/update/profile-image")
+    public void updateProfileImage(@RequestParam String id, @RequestParam String imageId)
+    {
+        userUpdater.assignProfileImage(UUID.fromString(id), UUID.fromString(imageId));
     }
 
     @GetMapping(value = "/search", params = "query")
