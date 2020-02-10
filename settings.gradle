@@ -4,6 +4,7 @@ include "eureka-server",
         "common",
         "gateway",
         "account-service",
+        "media-service",
         "room-service",
         "database-service",
         "web-app"
