@@ -17,14 +17,16 @@ public class UserUpdater
 
   public void setStatus(UUID id, UserStatus status)
   {
-    var user = userFeignClient.find(id);
+    userFeignClient.setStatus(id.toString(), status);
 
-    user.ifPresent(u ->
-    {
-      userFeignClient.setStatus(id.toString(), status);
+    userFeignClient.find(id).ifPresent(updated -> sendUpdateToAllFriends(id.toString(), updated));
+  }
 
-      userFeignClient.find(id).ifPresent(updated -> sendUpdateToAllFriends(id.toString(), updated));
-    });
+  public void setProfileImage(String id, String imageId)
+  {
+    userFeignClient.setProfileImage(id, imageId);
+
+    userFeignClient.find(UUID.fromString(id)).ifPresent(updated -> sendUpdateToAllFriends(id, updated));
   }
 
   private void sendUpdateToAllFriends(String id, Object object)
