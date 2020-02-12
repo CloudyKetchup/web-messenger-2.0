@@ -1,4 +1,5 @@
-.message-div {
+.message-div
+{
   background: #181818;
   color: white;
   border-radius: 5px;
@@ -9,4 +10,39 @@
   width: fit-content;
   max-width: 50%;
   display: flex;
+  animation: chat-message-right;
+  animation-duration: 0.2s;
+}
+
+#chat-message-time
+{
+  font-size: 12px;
+  line-height: 18px;
+  color: #f1efef;
+}
+
+@keyframes chat-message-right
+{
+  from
+  {
+    opacity: 0;
+    margin-right: -10px;
+  } to
+  {
+    opacity: 1;
+    margin-right: unset;
+  }
+}
+
+@keyframes chat-message-left
+{
+  from
+  {
+    opacity: 0;
+    margin-left: -10px;
+  } to
+  {
+    opacity: 1;
+    margin-left: unset;;
+  }
 }

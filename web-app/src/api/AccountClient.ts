@@ -4,6 +4,7 @@ import { AuthReponse } from "../model/AuthResponse";
 import { User } from "../model/User";
 import { Room } from "../model/Room";
 import { FriendRequest } from "../model/request/FriendRequest";
+import { Status } from "../model/Status";
 
 const URL = "http://localhost:8080/account";
 
@@ -44,10 +45,24 @@ export class AccountClient
       .catch(console.log)
   );
 
-  static getFriendRoom = (id : string, friendId : string) : Promise<Room> =>
+  static getFriendRoom = (id : string, friendId : string) : Promise<Room | null> =>
   (
     axios.get(`${URL}/get/room?userId=${id}&friendId=${friendId}`)
       .then(response => response.data)
       .catch(console.log)
+  );
+  
+  static setStatus = (id : string, status : Status) =>
+  (
+    axios.post(`${URL}/set/status?id=${id}&status=${status}`)
+      .then(response => response.data)
+      .catch(console.log)
+  );
+
+  static setProfilePicture = (id : string, imageId : string, fallback? : () => void) =>
+  (
+    axios.post(`${URL}/set/profile-image?id=${id}&imageId=${imageId}`)
+      .then(response => response.data)
+      .catch(fallback)
   );
 }

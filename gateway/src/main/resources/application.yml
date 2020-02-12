@@ -19,6 +19,11 @@ spring:
           uri: lb://ROOM-SERVICE/
           predicates:
             - Path=/room/**
+        - id: media-service
+          uri: lb://MEDIA-SERVICE/
+          predicates:
+            - Path=/image/**
+#            - Path=/media/**
   application:
     name: gateway
 eureka:

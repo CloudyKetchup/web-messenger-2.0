@@ -7,12 +7,16 @@ import { AuthReponse } from "../model/AuthResponse";
 
 import { AccountClient } from "../api/AccountClient";
 
+import { RoomContextHelpers } from "../helpers/RoomContextHelpers";
+
 import { FriendRequestComponentContext } from "../util/FriendRequestComponentContext";
 import { LeftPanelComponentContext } from "../util/LeftPanelComponentContext";
 
+import { MessagingClient } from "../api/MessagingClient";
+
 /**
- * A model similar to {@link ProfileContext} except that profile
- * have type of {@link User | null} instead of {@link User}
+ * A model similar to @type {ProfileContext} except that profile
+ * have type of @type {User} instead of @type {User}
  */
 type ProfileContextLike = {
   profile : User | null
@@ -61,8 +65,8 @@ export class ProfileContextHelpers
     /**
      * Build context
      * 
-     * @param user    {@link User}
-     * @return {ProfileContext}
+     * @param user    @type {User}
+     * @return @type {ProfileContext}
      */
     build = (user : User) : ProfileContext =>
     {
@@ -75,11 +79,11 @@ export class ProfileContextHelpers
   /**
    * Create context based on result from authentication request
    * 
-   * @param result    result from api {@link AuthReponse}
+   * @param result    result from api @type {AuthReponse}
    * @param fallback  function called if not authenticated
    * @param callback  optional function called on success
    */
-  static createBasedOnAuth = async (result : AuthReponse, fallback : (result : AuthReponse) => void, callback? : () => void) =>
+  static createBasedOnAuth = async (result : AuthReponse, fallback? : (result : AuthReponse) => void, callback? : (account : User) => void) =>
   {
     if (result && result.status === "OK" && result.account)
     {
@@ -95,31 +99,38 @@ export class ProfileContextHelpers
 
       ProfileContextHelpers.createContext(profile);
 
-      callback && callback();
+      callback && callback(result.account);
     }
-    else fallback(result);
+    else fallback && fallback(result);
   };
 
   /**
    * Creates profile context
    * 
-   * @param context     {@link ProfileContext} context
+   * @param context     @type {ProfileContext} context
    */
   static createContext = (context : ProfileContext) => ProfileContextHelpers.profileContext = context;
 
   /**
    * Add a room to rooms list from profile
    * 
-   * @param room    {@link Room}
+   * @param room    @type {Room}
    */
   static addRoom = (room : Room) =>
   {
     if (!ProfileContextHelpers.roomExist(room))
     {
       ProfileContextHelpers.profileContext?.rooms.push(room);
+
+      MessagingClient.getInstance().subscribeRoom(room);
     }
   };
 
+  /**
+   * Update room from list, finds target by id
+   * 
+   * @param room    @type {Room}
+   */
 	static updateRoom = (room : Room) =>
 	{
 		if (ProfileContextHelpers.profileContext)
@@ -131,9 +142,36 @@ export class ProfileContextHelpers
 	};
 
   /**
+   * Update friend from friends list, find by id, after that
+   * updates it's component
+   * 
+   * @param friend  @type {User}
+   */
+  static updateFriend = (friend : User) =>
+  {
+    if (ProfileContextHelpers.profileContext)
+    {
+      const index = ProfileContextHelpers.profileContext.friends.findIndex(f => f.id === friend.id);
+
+      ProfileContextHelpers.profileContext.friends[index] = friend;
+
+      LeftPanelComponentContext.getInstance().updateFriend(friend);
+
+			if (RoomContextHelpers.context)
+			{
+				const newRoomContext = RoomContextHelpers.context;
+
+				newRoomContext.user = friend;
+
+				RoomContextHelpers.updateContext(newRoomContext);
+			}
+    }
+  };
+
+  /**
    * Add a friend to friends list from profile
    * 
-   * @param friend  {@link User}
+   * @param friend  @type {User}
    */
   static addFriend = (friend : User) =>
   {
@@ -142,13 +180,17 @@ export class ProfileContextHelpers
       ProfileContextHelpers.profileContext.friends.push(friend);
 
       LeftPanelComponentContext.getInstance().updateFriendsList(ProfileContextHelpers.profileContext.friends);
+
+      // get room for that friend and add it to context
+      AccountClient.getFriendRoom(ProfileContextHelpers.profileContext.profile.id, friend.id)
+        .then(room => room && ProfileContextHelpers.addRoom(room));
     }
   };
 
   /**
    * Add friend request to list
    * 
-   * @param request     {@link FriendRequest}
+   * @param request     @type {FriendRequest}
    */
   static addFriendRequest = (request : FriendRequest) =>
   {
@@ -163,8 +205,8 @@ export class ProfileContextHelpers
   /**
    * Find room in rooms list from profile context by it's id
    * 
-   * @param id    {@link Room} id
-   * @return {@link Room} or void if not found
+   * @param id    @type {Room} id
+   * @return @type {Room} or void if not found
    */
   static findRoomById = (id : string) =>
   {
@@ -174,7 +216,7 @@ export class ProfileContextHelpers
   /**
    * Checks if room exists in rooms list from profile context
    * 
-   * @param room    {@link Room}
+   * @param room    @type {Room}
    * @return boolean depending on result
    */
   static roomExist = (room : Room) : Boolean =>
@@ -185,7 +227,7 @@ export class ProfileContextHelpers
   /**
    * Checks if friend exists in friendslist from profile context
    * 
-   * @param friend  {@link User}
+   * @param friend  @type {User}
    */
   static friendExists = (friend : User) : Boolean =>
   {

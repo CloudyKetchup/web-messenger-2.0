@@ -1,4 +1,4 @@
-package com.krypton.messagingservice;
+package com.krypton.roomservice;
 
 import com.krypton.common.model.room.Room;
 import com.krypton.roomservice.feign.RoomFeignClient;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
+@SpringBootTest(classes = RoomServiceApplication.class)
 @RunWith(SpringRunner.class)
 public class RoomModelTests
 {

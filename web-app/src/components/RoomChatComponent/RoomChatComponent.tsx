@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import { User } from "../../model/User";
-import { Message } from "../../model/Message";
+import { User } 		from "../../model/User";
+import { Message } 	from "../../model/Message";
 
 import RoomContext from "../../context/RoomContext";
 
@@ -14,13 +14,16 @@ import MessageComponent from "../MessageComponent/MessageComponent";
 
 import { MessagingClient } from "../../api/MessagingClient";
 
+import SendIcon from "../../assets/send.svg";
+import PlusIcon from "../../assets/plus.svg";
+
 import "./room-chat-component.css";
 
 type IProps = { room : RoomContext };
 
 type IState = {
+	room 					: RoomContext
 	choosenImages : FileList | null
-	user					: User | undefined
 	typing				: boolean
 	messages			: Message[]
 };
@@ -28,8 +31,8 @@ type IState = {
 export default class RoomChatComponent extends Component<IProps, IState>
 {
 	state : IState = {
+		room					: this.props.room,
 		choosenImages : null,
-		user					: this.props.room.user,
 		typing				: true,
 		messages			: this.props.room.data?.messages || []
 	};
@@ -41,8 +44,12 @@ export default class RoomChatComponent extends Component<IProps, IState>
 		this.scrollBottom();
 	};
 
-	componentDidUpdate = async () =>
+	componentDidUpdate = () =>
 	{
+		if (RoomContextHelpers.context.data !== this.state.room.data)
+		{
+			this.setState({ room : RoomContextHelpers.context });
+		}
 		/* if this component was updated and messages from context didn't match with those from
 			 state -> assign messages from context to state to update the ui */
 		if (RoomContextHelpers.context?.data && RoomContextHelpers.getCurrentRoomMessages() !== this.state.messages)
@@ -54,9 +61,9 @@ export default class RoomChatComponent extends Component<IProps, IState>
 
 	chooseImages = async () =>
 	{
-		if (this.props.room.data)
+		if (this.state.room.data)
 		{
-			const input = document.getElementById(`room-${this.props.room.data.id}-choose-images`);
+			const input = document.getElementById("room-choose-images");
 
 			input && input.click();
 		}
@@ -74,9 +81,9 @@ export default class RoomChatComponent extends Component<IProps, IState>
 
 	sendMessage = async () =>
 	{
-		if (this.props.room.data)
+		if (this.state.room.data)
 		{
-			const input = document.getElementById(`room-${this.props.room.data.id}-input`) as HTMLInputElement;
+			const input = document.getElementById(`room-${this.state.room.data.id}-input`) as HTMLInputElement;
 
 			if (input && input.value !== "" && Profile.profileContext)
 			{
@@ -86,8 +93,9 @@ export default class RoomChatComponent extends Component<IProps, IState>
 					authorId : Profile.profileContext.profile.id
 				};
 
-				MessagingClient.sendMessage(messageBody, this.props.room.data.id)
-					.then(() => input.value = "");
+				await MessagingClient.getInstance().sendMessage(messageBody, this.state.room.data.id)
+
+				input.value = "";
 			}
 		}
 	};
@@ -95,7 +103,7 @@ export default class RoomChatComponent extends Component<IProps, IState>
 	render = () => (
 		<div className="room-chat">
 			<div className="room-chat-header">
-				<span>{this.state.user?.status.toString()}</span>
+				<span>{this.state.room.user?.status.toString()}</span>
 				{
 					this.state.typing
 					&&
@@ -107,9 +115,8 @@ export default class RoomChatComponent extends Component<IProps, IState>
 				}
 			</div>
 			<div className="room-chat-body">
-				<div className="chat-messages-container" style={{ overflow : "auto" }}>
-					{this.state.messages
-						.map(m => <MessageComponent key={m.id} data={m}/>)}
+				<div className="chat-messages-container" style={{ paddingTop : 10, overflow : "auto" }}>
+					{this.state.messages.map(message => <MessageComponent key={message.id} data={message}/>)}
 				</div>
 			</div>
 			<div className="room-chat-footer">
@@ -125,9 +132,13 @@ export default class RoomChatComponent extends Component<IProps, IState>
 							this.setState({ choosenImages : input?.files });
 						}}
 						multiple/>
-					<button onClick={this.chooseImages}><i className="fas fa-paperclip"/></button>
-					<input id={`room-${this.props.room.data?.id}-input`} placeholder="Your message..."/>
-					<button onClick={this.sendMessage}><i className="fas fa-paper-plane"/></button>
+					<button onClick={this.chooseImages}>
+						<img style={{ height : 20 }} src={PlusIcon} alt="..."/>
+					</button>
+					<input id={`room-${this.state.room.data?.id}-input`} placeholder="Your message..."/>
+					<button onClick={this.sendMessage}>
+						<img style={{ height : 35 }} src={SendIcon} alt="..."/>
+					</button>
 				</div>
 			</div>
 		</div>

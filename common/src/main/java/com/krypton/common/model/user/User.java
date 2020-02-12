@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krypton.common.model.BaseEntity;
 import com.krypton.common.model.media.Image;
 import com.krypton.common.model.request.FriendRequest;
-import com.krypton.common.model.room.Room;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

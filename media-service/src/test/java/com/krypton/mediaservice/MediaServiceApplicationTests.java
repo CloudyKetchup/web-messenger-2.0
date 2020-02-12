@@ -1,10 +1,10 @@
-package com.krypton.messagingservice;
+package com.krypton.mediaservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class MediaServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -4,6 +4,7 @@ import LeftPanelComponent from "./components/LeftPanel/LeftPanelComponent";
 import RoomComponent 			from "./components/RoomComponent/RoomComponent";
 import SearchComponent 		from "./components/SearchComponent/SearchComponent";
 import FriendRequestsPaneComponent from "./components/FriendRequestsPane/FriendRequestsPaneComponent";
+import { NotificationPad } from "./components/Notification/NotificationPad/NotificationPad"
 
 import { ProfileContextHelpers as Profile } 	from "./helpers/ProfileContextHelpers";
 import { AppContextHelpers as AppContext }  	from "./helpers/AppContextHelpers";
@@ -14,10 +15,15 @@ import { AccountSocketClient } from "./api/AccountSocketClient";
 
 import { Switch, Route, match } from 'react-router';
 
+import { History } from "history";
+
+import * as PageEvents from "./util/events/PageEvents";
+
 import './index.css';
 
 type IProps = {
 	match : match
+	history : History
 };
 
 type IState = {
@@ -32,10 +38,16 @@ export default class App extends Component<IProps, IState>
 
 	componentDidMount = () =>
 	{
+		if (!Profile.profileContext)
+		{
+			this.props.history.push("/login");
+		}
 		AppContext.createContext({ roomSelected : null }, this);
 
-		MessagingClient.init();
-		AccountSocketClient.init();
+		MessagingClient.getInstance().init();
+		AccountSocketClient.getInstance().init();
+
+		PageEvents.initExitListener();
 	};
 
 	toggleFriendRequestsPane = () => this.setState({ friendRequestsPane : !this.state.friendRequestsPane });
@@ -43,13 +55,7 @@ export default class App extends Component<IProps, IState>
 	render = () => (
 		<div className="main-container">
 			<LeftPanelComponent friends={Profile.profileContext?.friends || []} match={this.props.match}/>
-			{
-				RoomContext.context
-				&&
-				RoomContext.context.data
-				&&
-				<RoomComponent room={RoomContext.context}/>
-			}
+			<RoomComponent room={RoomContext.context} />
 			<Switch>
 				<Route path={`${this.props.match.url}/search`} component={SearchComponent}/>
 			</Switch>
@@ -69,6 +75,7 @@ export default class App extends Component<IProps, IState>
 					close={this.toggleFriendRequestsPane}
 				/>
 			}
+			<NotificationPad app={this}/>
 		</div>
 	);
 }

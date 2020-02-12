@@ -3,13 +3,13 @@ package com.krypton.accountservice.controller;
 import com.krypton.accountservice.feign.UserFeignClient;
 import com.krypton.accountservice.model.SearchResultUser;
 import com.krypton.accountservice.service.UserService;
+import com.krypton.accountservice.service.UserUpdater;
 import com.krypton.common.model.request.FriendRequest;
 import com.krypton.common.model.room.Room;
 import com.krypton.common.model.user.User;
+import com.krypton.common.model.user.UserStatus;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class UserController extends MainController
 {
   private final UserFeignClient userFeignClient;
   private final UserService userService;
+  private final UserUpdater userUpdater;
 
   @GetMapping("/get/friends")
   public Set<User> getFriends(@RequestParam String id)
@@ -45,6 +46,18 @@ public class UserController extends MainController
   public Optional<Room> getRoomByFriend(@RequestParam String userId, @RequestParam String friendId)
   {
     return userService.getRoomByFriend(UUID.fromString(userId), UUID.fromString(friendId));
+  }
+
+  @PostMapping("/set/status")
+  public void setStatus(@RequestParam String id, @RequestParam String status)
+  {
+    userUpdater.setStatus(UUID.fromString(id), UserStatus.valueOf(status));
+  }
+
+  @PostMapping("/set/profile-image")
+  public void setProfileImage(@RequestParam String id, @RequestParam String imageId)
+  {
+    userUpdater.setProfileImage(id, imageId);
   }
 
   @GetMapping(value = "/search", params = "query")

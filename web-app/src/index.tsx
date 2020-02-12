@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
+import { LoadingScreenComponent }       from "./components/LoadingScreen/LoadingScreenComponent";
 import { LoginWindowComponent }         from "./components/LoginWindowComponent/LoginWindowComponent";
 import { RegistrationWindowComponent }  from "./components/RegistrationWindowComponent/RegistrationWindowComponent";
 
@@ -9,12 +10,30 @@ import { ProfileContextHelpers as Profile } from './helpers/ProfileContextHelper
 
 import { Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 
-import './index.css';
+import * as CookieManager from "./util/cookie/CookieManager";
+
 import * as serviceWorker from './serviceWorker';
 
-export default class AppWrapper extends Component {
+import './index.css';
+
+export default class AppWrapper extends Component
+{
+  state = {
+    loading : true
+  };
+
+  componentDidMount = async () =>
+  {
+    await CookieManager.loadProfile();
+
+    setTimeout(() => this.setState({ loading : false }), 1000);
+  };
 
   render = () => (
+    this.state.loading
+    ?
+    <LoadingScreenComponent/>
+    :
     <Router>
       <Switch>
         <Route exact path="/" component={() => <Redirect to={Profile.profileContext ? "/chat" : "/login"} />} />

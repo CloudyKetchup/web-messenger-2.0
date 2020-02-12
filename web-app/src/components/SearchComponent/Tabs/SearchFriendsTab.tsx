@@ -13,7 +13,7 @@ export const SearchFriendsTab : FC<{ result : UserSearchResult[] }> = props =>
       props.result.map(result => <UserSearchResultComponent key={result.user.id} data={result}/>)
       :
       <div>
-
+        {/*TODO: empty search tab*/}
       </div>
     }
   </div>

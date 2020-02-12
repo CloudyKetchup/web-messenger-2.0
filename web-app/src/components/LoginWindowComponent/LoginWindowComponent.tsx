@@ -8,6 +8,8 @@ import { AccountClient }  from "../../api/AccountClient";
 
 import { History } from "history";
 
+import * as CookieManager from "../../util/cookie/CookieManager";
+
 import "./login-window-component.css";
 import "../../css/animated-squares.css";
 
@@ -31,7 +33,7 @@ export const LoginWindowComponent : FC<{ history : History }> = props =>
       {
         console.log("not logged in", result);
       },
-      () => props.history.push("/chat"));
+			() => { CookieManager.saveCredentials(email, password); props.history.push("/chat"); });
   };
 
   return (

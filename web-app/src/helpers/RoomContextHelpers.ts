@@ -1,7 +1,6 @@
 import RoomContext from "../context/RoomContext";
 
 import { ProfileContextHelpers as Profile } from "./ProfileContextHelpers";
-import { AppContextHelpers } from "./AppContextHelpers";
 
 import { RoomClient } from "../api/RoomClient";
 
@@ -14,21 +13,18 @@ export class RoomContextHelpers
 	static context : RoomContext;
 
 	/**
-	 * Create room context
-	 * 
-	 * @param context     {@link RoomContext} object
+	 * @param context     @type {RoomContext} object
 	 */
 	static createContext = (context : RoomContext) => RoomContextHelpers.context = context;
 
 	/**
-	 * Update room context
+	 * Change current selected room to new one,
+	 * will update context then update room related component
 	 * 
-	 * @param room    {@link RoomContext} for swaping
+	 * @param room    @type {RoomContext} for swaping
 	 */
 	static changeRoom = async (room : RoomContext) =>
 	{
-		const roomContextWasNull = RoomContextHelpers.context === undefined;
-
 		if (room.data)
 		{
 			room.data.messages = await RoomClient.getMessages(room.data.id);
@@ -37,18 +33,25 @@ export class RoomContextHelpers
 
 			Profile.updateRoom(room.data);
 
-			RoomContextHelpers.createContext(room);
-
-			if (roomContextWasNull)
-			{
-				AppContextHelpers.refreshMainComponent();
-			} else
-			{
-				RoomComponentContext.getInstance().updateRoom(room);
-			}
+			RoomContextHelpers.updateContext(room);
 		}
 	};
 
+	/**
+	 * @param room 		@type {RoomContext}
+	 */
+	static updateContext = (room : RoomContext) =>
+	{
+		RoomContextHelpers.createContext(room);
+
+		RoomComponentContext.getInstance().updateRoom(room);
+	};
+
+	/**
+	 * get messages from current selected room
+	 * 
+	 * @return array of @type {Message}
+	 */
 	static getCurrentRoomMessages = () : Message[] =>
 	{
 		if (RoomContextHelpers.context?.data)
@@ -61,7 +64,7 @@ export class RoomContextHelpers
 	/**
 	 * Add message to context
 	 * 
-	 * @param message   {@link Message}
+	 * @param message   @type {Message}
 	 */
 	static addMessage = async (message : Message) =>
 	{

@@ -1,34 +1,43 @@
 import React, { Component } from "react";
 
-import { User } from "../../model/User";
+import { User } 	from "../../model/User";
 import { Status } from "../../model/Status";
+import { Room } 	from "../../model/Room";
 
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
-
-import { Room } from "../../model/Room";
-
 import { RoomContextHelpers } from "../../helpers/RoomContextHelpers";
 
-import "./list-user-component.css";
 import { AccountClient } from "../../api/AccountClient";
 
-type IProps = {
-	data : User
-};
+import { LeftPanelComponentContext } from "../../util/LeftPanelComponentContext";
+
+import "./list-user-component.css";
+
+type IProps = { data : User };
 
 type IState = {
+	data : User
 	selected : boolean
 };
 
-export default class ListUserComponent extends Component<IProps> {
+export default class ListUserComponent extends Component<IProps>
+{
 	state : IState = {
+		data : this.props.data,
 		selected : false
 	};
 
-	room : Room | undefined;
+	room : Room | null = null;
 
-	statusColor = () : string => {
-		switch (this.props.data.status) {
+	componentDidMount = () =>
+	{
+		LeftPanelComponentContext.getInstance().registerComponent(this);
+	};
+
+	statusColor = () : string =>
+	{
+		switch (this.state.data.status)
+		{
 			case Status.ONLINE:
 				return "#35CE8D";
 			case Status.OFFLINE:
@@ -39,12 +48,16 @@ export default class ListUserComponent extends Component<IProps> {
 		}
 	};
 
-	selectUser = async () => {
+	selectUser = async () =>
+	{
 		if (Profile.profileContext)
 		{
+			// if room already selected stop;
+			if (this.room && this.room.id === RoomContextHelpers.context?.data?.id) return;
+
 			if (!this.room)
 			{
-				this.room = await AccountClient.getFriendRoom(Profile.profileContext.profile.id, this.props.data.id);
+				this.room = await AccountClient.getFriendRoom(Profile.profileContext.profile.id, this.state.data.id);
 			}
 			if (this.room)
 			{
@@ -54,7 +67,7 @@ export default class ListUserComponent extends Component<IProps> {
 
 				RoomContextHelpers.changeRoom({
 					data: this.room,
-					user: this.props.data,
+					user: this.state.data,
 					stats: undefined // TODO: get stats from backend
 				});
 			}
@@ -67,12 +80,19 @@ export default class ListUserComponent extends Component<IProps> {
 				<div className="list-user-focus"/>
 				<div className="list-user-info">
 					<div className="list-user-photo">
-						<img src="https://images-na.ssl-images-amazon.com/images/I/31qu4ixHZ3L._SY355_.jpg" alt=""/>
+						<img src={`http://localhost:8080/image/get?id=${this.props.data.profileImage?.id}`} alt=""/>
 					</div>
-					<div className="list-user-nick">
-						<span style={{ color: this.state.selected ? "white" : "#a9a9a9" }}>
-							{this.props.data.nick}
-						</span>
+					<div>
+						<div className="list-user-nick">
+							<span style={{ color : this.state.selected ? "white" : "#a9a9a9", fontSize : 15 }}>
+								{this.state.data.nick}
+							</span>
+						</div>
+						<div className="list-user-last-message">
+							<span style={{ color : "gray", fontSize : 13, marginLeft : 5 }}>
+								Last message
+							</span>
+						</div>
 					</div>
 					<div className="list-user-status">
 						<div style={{ background : this.statusColor() }}/>

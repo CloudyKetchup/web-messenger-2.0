@@ -1,0 +1,9 @@
+.notification-pad
+{
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 270px;
+  position: absolute;
+}

@@ -1,8 +1,16 @@
 server:
   port: 8300
 spring:
+#  main:
+#    web-application-type: reactive
   application:
     name: account-service
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
 eureka:
   client:
     register-with-eureka: true

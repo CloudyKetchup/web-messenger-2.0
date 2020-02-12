@@ -3,7 +3,7 @@ import { Message } from "./Message";
 
 export type Room = {
     id          : string
-    name?       : string
+    name        : string
     messages    : Message[]
     images      : number
     documents   : number
