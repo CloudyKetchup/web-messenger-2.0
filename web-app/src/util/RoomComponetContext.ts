@@ -24,46 +24,22 @@ export class RoomComponentContext extends ComponentContext
 
   updateRoom = (room: RoomContext) =>
   {
-    const setState = () =>
+    if (!RoomComponentContext.roomComponent)
     {
-      RoomComponentContext.roomComponent.setState({ empty : false, room : room });
-    };
-
-    if (RoomComponentContext.roomComponent)
-    {
-      setState();
-      return;
-    } else
-    {
-      const roomComponent = this.components.filter(c => c instanceof RoomComponent)[0] as RoomComponent;
-
-      if (roomComponent)
-      {
-        RoomComponentContext.roomComponent = roomComponent;
-
-        setState();
-      }
+      RoomComponentContext.roomComponent = this.components.filter(c => c instanceof RoomComponent)[0] as RoomComponent;
     }
+    RoomComponentContext.roomComponent && RoomComponentContext.roomComponent.setState({ room : room });
   };
 
   updateMessages = (messages : Message[]) =>
   {
-    const roomChatComponent = RoomComponentContext.roomChatComponent;
-
-    if (roomChatComponent)
+    if (!RoomComponentContext.roomChatComponent)
     {
-      roomChatComponent.setState({ messages: messages }, roomChatComponent.scrollBottom);
-      return;
-    } else
+      RoomComponentContext.roomChatComponent = this.components.filter(c => c instanceof RoomChatComponent)[0] as RoomChatComponent;
+    }
+    if (RoomComponentContext.roomChatComponent)
     {
-      const roomChatComponent = this.components.filter(c => c instanceof RoomChatComponent)[0] as RoomChatComponent;
-
-      if (roomChatComponent)
-      {
-        RoomComponentContext.roomChatComponent = roomChatComponent;
-
-        roomChatComponent.setState({ messages: messages }, roomChatComponent.scrollBottom);
-      }
+      RoomComponentContext.roomChatComponent.setState({ messages : messages }, roomChatComponent.scrollBottom)
     }
   };
 };
