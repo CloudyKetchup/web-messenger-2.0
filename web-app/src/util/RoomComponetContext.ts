@@ -39,7 +39,7 @@ export class RoomComponentContext extends ComponentContext
     }
     if (RoomComponentContext.roomChatComponent)
     {
-      RoomComponentContext.roomChatComponent.setState({ messages : messages }, roomChatComponent.scrollBottom)
+      RoomComponentContext.roomChatComponent.setState({ messages : messages }, RoomComponentContext.roomChatComponent.scrollBottom)
     }
   };
-};
+}
