@@ -63,7 +63,7 @@ export default class RoomChatComponent extends Component<IProps, IState>
 	{
 		if (this.state.room.data)
 		{
-			const input = document.getElementById(`room-${this.state.room.data.id}-choose-images`);
+			const input = document.getElementById("room-choose-images");
 
 			input && input.click();
 		}

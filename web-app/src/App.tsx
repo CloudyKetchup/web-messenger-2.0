@@ -4,6 +4,7 @@ import LeftPanelComponent from "./components/LeftPanel/LeftPanelComponent";
 import RoomComponent 			from "./components/RoomComponent/RoomComponent";
 import SearchComponent 		from "./components/SearchComponent/SearchComponent";
 import FriendRequestsPaneComponent from "./components/FriendRequestsPane/FriendRequestsPaneComponent";
+import { NotificationPad } from "./components/Notification/NotificationPad/NotificationPad"
 
 import { ProfileContextHelpers as Profile } 	from "./helpers/ProfileContextHelpers";
 import { AppContextHelpers as AppContext }  	from "./helpers/AppContextHelpers";
@@ -74,6 +75,7 @@ export default class App extends Component<IProps, IState>
 					close={this.toggleFriendRequestsPane}
 				/>
 			}
+			<NotificationPad app={this}/>
 		</div>
 	);
 }

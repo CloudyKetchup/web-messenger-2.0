@@ -26,7 +26,7 @@ export default class AppWrapper extends Component
   {
     await CookieManager.loadProfile();
 
-    this.setState({ loading : false }, () => console.log(Profile.profileContext));
+    setTimeout(() => this.setState({ loading : false }), 1000);
   };
 
   render = () => (

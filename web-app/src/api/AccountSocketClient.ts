@@ -1,11 +1,17 @@
 import { Stomp, CompatClient, IMessage } from "@stomp/stompjs";
 
 import { ProfileContextHelpers as Profile } from "../helpers/ProfileContextHelpers";
-
-import { User } from "../model/User";
-import { Status } from "../model/Status";
+import { NotificationContextHelpers } from "../helpers/NotificationContextHelpers";
 
 import { AccountClient } from "./AccountClient";
+
+import { User }                       from "../model/User";
+import { Status }                     from "../model/Status";
+import { FriendRequest }              from "../model/request/FriendRequest";
+import { FriendRequestNotification }  from "../model/notification/FriendRequestNotification";
+import { NotificationType }           from "../model/notification/Notification";
+
+import * as UUID from "../util/uuid/UUIDTools";
 
 export class AccountSocketClient
 {
@@ -49,7 +55,7 @@ export class AccountSocketClient
       {
         AccountClient.setStatus(Profile.profileContext.profile.id, Status.ONLINE);
 
-        this.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/new-friend`, this.recieveNewFriend);
+        this.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/new-friend`, this.receiveNewFriend);
         this.stomp.subscribe(`/acc/user/${Profile.profileContext.profile.id}/receive/friend-request`, this.receiveFriendRequest);
 
         this.subscribeFriendUpdates(Profile.profileContext.friends);
@@ -68,7 +74,21 @@ export class AccountSocketClient
     });
   };
 
-  private recieveNewFriend = (response : IMessage) => Profile.addFriend(JSON.parse(response.body));
+  private receiveNewFriend = (response : IMessage) => Profile.addFriend(JSON.parse(response.body));
 
-  private receiveFriendRequest = (response : IMessage) => Profile.addFriendRequest(JSON.parse(response.body));
+  private receiveFriendRequest = (response : IMessage) =>
+  {
+    const request = JSON.parse(response.body) as FriendRequest;
+
+    Profile.addFriendRequest(request);
+
+    const from = request.from.nick;
+
+    NotificationContextHelpers.getInstance().addNotification({
+      id : UUID.generateUUIDV4(),
+      text : `You've got a friend request from ${from.length > 3 ? `${from.substring(0, 3)}...` : from}`,
+      from : request.from.nick,
+      type : NotificationType.FRIEND_REQUEST
+    } as FriendRequestNotification);
+  }
 }

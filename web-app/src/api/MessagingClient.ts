@@ -1,10 +1,15 @@
 import { Room }    from "../model/Room";
 import { Message } from "../model/Message";
+import { ChatMessageNotification } from "../model/notification/ChatMessageNotification ";
 
 import { RoomContextHelpers } from "../helpers/RoomContextHelpers";
 import { ProfileContextHelpers as Profile } from "../helpers/ProfileContextHelpers";
+import { NotificationContextHelpers } from "../helpers/NotificationContextHelpers";
 
 import { Stomp, CompatClient } from "@stomp/stompjs";
+
+import * as UUID from "../util/uuid/UUIDTools";
+import { NotificationType } from "../model/notification/Notification";
 
 export type MessageBody = {
 	text      : string
@@ -67,12 +72,20 @@ export class MessagingClient
 		if (RoomContextHelpers.context?.data?.id === room.id)
 		{
 			RoomContextHelpers.addMessage(message);
-		}
-		else
+		} else
 		{
-			this.getNotification(message);
+			this.getNotification(message, room);
 		}
 	};
 
-	private getNotification = (message : Message) => console.log(message + "\n");
+	private getNotification = (message : Message, room : Room) =>
+	{
+		NotificationContextHelpers.getInstance().addNotification({
+			id 				: UUID.generateUUIDV4(),
+			text 			: `${message.author.nick} - ${message.text}`,
+			type 			: NotificationType.MESSAGE,
+			message		: message,
+			room			: room
+		} as ChatMessageNotification);
+	};
 }

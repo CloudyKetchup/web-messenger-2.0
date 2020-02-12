@@ -80,7 +80,7 @@ export default class ListUserComponent extends Component<IProps>
 				<div className="list-user-focus"/>
 				<div className="list-user-info">
 					<div className="list-user-photo">
-						<img src="https://images-na.ssl-images-amazon.com/images/I/31qu4ixHZ3L._SY355_.jpg" alt=""/>
+						<img src={`http://localhost:8080/image/get?id=${this.props.data.profileImage?.id}`} alt=""/>
 					</div>
 					<div>
 						<div className="list-user-nick">
