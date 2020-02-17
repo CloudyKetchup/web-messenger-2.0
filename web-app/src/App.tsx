@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import LeftPanelComponent from "./components/LeftPanel/LeftPanelComponent";
 import RoomComponent 			from "./components/RoomComponent/RoomComponent";
 import SearchComponent 		from "./components/SearchComponent/SearchComponent";
+import UserInfoComponent	from "./components/UserInfoComponent/UserInfoComponent";
 import FriendRequestsPaneComponent from "./components/FriendRequestsPane/FriendRequestsPaneComponent";
 import { NotificationPad } from "./components/Notification/NotificationPad/NotificationPad"
 
@@ -58,6 +59,7 @@ export default class App extends Component<IProps, IState>
 			<RoomComponent room={RoomContext.context} />
 			<Switch>
 				<Route path={`${this.props.match.url}/search`} component={SearchComponent}/>
+				<Route path={`${this.props.match.url}/user/info`} render={props => <UserInfoComponent {...props}/>}/>
 			</Switch>
 			{
 				!this.state.friendRequestsPane
