@@ -80,7 +80,7 @@ export class RoomContextHelpers
 				// assign room from profile to context data
 				RoomContextHelpers.context.data = room;
 
-				RoomComponentContext.getInstance().updateMessages(RoomContextHelpers.context.data.messages);
+				RoomComponentContext.getInstance().updateRoom(RoomContextHelpers.context);
 			}
 		}
 	};
