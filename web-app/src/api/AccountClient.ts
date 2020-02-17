@@ -24,6 +24,13 @@ export class AccountClient
       .catch(console.log)
   );
 
+  static findById = (id : string) : Promise<User | undefined> =>
+  (
+    axios.get(`${URL}/get?id=${id}`)
+      .then(response => response.data)
+      .catch(console.log)
+  );
+
   static getFriends = (id : string) : Promise<User[]> =>
   (
     axios.get(`${URL}/get/friends?id=${id}`)
