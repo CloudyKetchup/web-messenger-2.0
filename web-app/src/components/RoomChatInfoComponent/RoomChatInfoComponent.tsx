@@ -34,7 +34,7 @@ export default class RoomChatInfoComponent extends Component<IProps>
 						{
 							this.props.room.user?.profileImage?.id
 							?
-							<img src={`http://localhost:8080/image/get?id=${this.props.room.user.profileImage.id}`} alt="" />
+							<img src={`http://localhost:8080/image/get?id=${this.props.room.user.profileImage.id}`} alt=""/>
 							:
 							<img src={UserSvg} alt=""/>
 						}
@@ -44,9 +44,9 @@ export default class RoomChatInfoComponent extends Component<IProps>
 					</div>
 				</div>
 				<div>
-					<span>321 Messages</span>
-					<span>136 Images</span>
-					<span>3 Documents</span>
+					<span>{this.props.room.data?.messages.length} Messages</span>
+					<span>0 Images</span>
+					<span>0 Documents</span>
 				</div>
 			</div>
 			<Separator/>
