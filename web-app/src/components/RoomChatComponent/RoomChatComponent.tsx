@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React, {Component, FC} from "react";
 
-import { User } 		from "../../model/User";
 import { Message } 	from "../../model/Message";
 
 import RoomContext from "../../context/RoomContext";
@@ -41,6 +40,7 @@ export default class RoomChatComponent extends Component<IProps, IState>
 	{
 		// register this component to be updated on room context update
 		RoomComponentContext.getInstance().registerComponent(this);
+		this.inputEnterListener();
 		this.scrollBottom();
 	};
 
@@ -57,7 +57,35 @@ export default class RoomChatComponent extends Component<IProps, IState>
 			this.setState({ messages : RoomContextHelpers.getCurrentRoomMessages() });
 		}
 		this.scrollBottom();
-	}
+	};
+
+	componentWillUnmount = () =>
+	{
+		const div = document.getElementById(`room-${this.state.room.data?.id}-input`);
+
+		if (div)
+		{
+			div.removeEventListener("keydown", this.keyEnterAction)
+		}
+	};
+
+	inputEnterListener = async () =>
+	{
+		const div = document.getElementById(`room-${this.state.room.data?.id}-input`);
+
+		if (div)
+		{
+			div.addEventListener("keydown", this.keyEnterAction)
+		}
+	};
+
+	private keyEnterAction = async (e : KeyboardEventInit) =>
+	{
+		if (e.code === "Enter")
+		{
+			this.sendMessage();
+		}
+	};
 
 	chooseImages = async () =>
 	{
@@ -93,32 +121,38 @@ export default class RoomChatComponent extends Component<IProps, IState>
 					authorId : Profile.profileContext.profile.id
 				};
 
-				await MessagingClient.getInstance().sendMessage(messageBody, this.state.room.data.id)
+				await MessagingClient.getInstance().sendMessage(messageBody, this.state.room.data.id);
 
 				input.value = "";
 			}
 		}
 	};
 
+	Separator : FC = () => <div className="room-chat-separator"/>;
+
 	render = () => (
 		<div className="room-chat">
 			<div className="room-chat-header">
-				<span>{this.state.room.user?.status.toString()}</span>
-				{
-					this.state.typing
-					&&
-					<span style={{
-						marginLeft: 10,
-						marginRight : "auto",
-						color : "grey"
-					}}>typing...</span>
-				}
-			</div>
-			<div className="room-chat-body">
-				<div className="chat-messages-container" style={{ paddingTop : 10, overflow : "auto" }}>
-					{this.state.messages.map(message => <MessageComponent key={message.id} data={message}/>)}
+				<div id="room-user-status">
+					<span style={{ fontWeight : 500 }}>{this.state.room.user?.status.toString()}</span>
+					{
+						this.state.typing
+						&&
+            <span style={{
+							marginLeft: 10,
+							marginRight : "auto",
+							color : "grey"
+						}}>typing...</span>
+					}
 				</div>
 			</div>
+			<this.Separator/>
+			<div className="room-chat-body">
+				<div className="chat-messages-container" style={{ paddingTop : 10, overflow : "auto" }}>
+					{this.state.messages.map(message => <MessageComponent key={message.id} {...message}/>)}
+				</div>
+			</div>
+			<this.Separator/>
 			<div className="room-chat-footer">
 				<div>
 					<input

@@ -1,7 +1,8 @@
-.room-component {
+.room-component
+{
   display: flex;
   background: white;
-  margin-left: auto;
+  margin-left: 18px;
   height: 100%;
   width: calc(100% - 250px);
 }
