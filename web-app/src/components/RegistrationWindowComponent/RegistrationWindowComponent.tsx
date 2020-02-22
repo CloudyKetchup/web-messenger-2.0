@@ -118,7 +118,7 @@ export class RegistrationWindowComponent extends Component<{ history : History }
         {
           CookieManager.saveCredentials(emailInput.value, passwordInput.value);
 
-          this.setProfilePicture(account, () => console.log("error"), () => this.props.history.push("/chat"));
+          await this.setProfilePicture(await account, () => console.log("error"), () => this.props.history.push("/chat"));
         });
     }
   };
@@ -129,9 +129,12 @@ export class RegistrationWindowComponent extends Component<{ history : History }
     {
       const image = await MediaClient.saveProfileImage(account.id, this.state.profilePictureFile);
 
-      const result = await AccountClient.setProfilePicture(account.id, image.id, fallback);
+      if (image)
+      {
+        const result = await AccountClient.setProfilePicture(account.id, image.id, fallback);
 
-      callback && callback(result);
+        callback && callback(result);
+      }
     }
   };
   

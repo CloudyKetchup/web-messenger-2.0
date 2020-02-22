@@ -6,7 +6,7 @@ const URL = "http://localhost:8080";
 
 export class MediaClient
 {
-  static saveProfileImage = (id : string, image : File) : Promise<Image> =>
+  static saveProfileImage = (id : string, image : File) : Promise<Image | undefined> =>
   {
     const formData = new FormData();
 

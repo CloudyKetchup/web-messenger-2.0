@@ -24,6 +24,12 @@ public class UserController extends MainController
   private final UserService userService;
   private final UserUpdater userUpdater;
 
+  @GetMapping("/get")
+  public Optional<User> findById(@RequestParam String id)
+  {
+    return userFeignClient.find(UUID.fromString(id));
+  }
+
   @GetMapping("/get/friends")
   public Set<User> getFriends(@RequestParam String id)
   {

@@ -1,95 +1,88 @@
-.room-chat-info {
-  border-left: 1px solid #a9a9a9;
-  background: white;
+.room-chat-info
+{
+  background: #EFEFEF;
   margin-left: auto;
+  box-shadow: 0 5px 13px -6px rgba(0, 0, 0, 0.75);
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  padding: 40px 10px 10px 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', serif;
   width: 300px;
+  height: 94%;
 }
 
-.room-chat-info-separator {
+.room-chat-info-separator
+{
+  margin-top: 30px;
   height: 1px;
   background: #a9a9a9;
-  width: 80%;
-}
-
-.room-chat-info-header .room-chat-info-user {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-.room-chat-info-header {
-  font-weight: 300;
-  text-align: center;
-  line-height: 50px;
-  height: 50px;
-}
-
-.room-chat-info-user {
-  height: 200px;
-}
-
-#room-chat-info-user-photo {
-  padding: 10px;
-  width: 110px;
-}
-
-#room-chat-info-user-photo img {
   width: 100%;
-  height: 100%;
-  border-radius: 100px;
 }
 
-.room-chat-info-user > div:first-child {
-  height: 40%;
+.chat-info-user
+{
+  height: auto;
+  max-height: 50%;
+}
+
+.chat-info-user > div:first-child
+{
+  height: 100px;
   display: flex;
 }
 
-.room-chat-info-user > div:first-child > div {
-  padding: 20px 5px;
-  width: -webkit-fill-available;
+.chat-info-data
+{
+  font-size: 25px;
+  margin: auto;
 }
 
-.room-chat-info-user > div:last-child {
-  height: 60%;
-  display: grid;
-  grid-auto-columns: minmax(3, 100px);
-}
-
-.room-chat-info-user span {
-  line-height: 40px;
+.chat-info-data > div:first-child
+{
   font-weight: 200;
-  margin-left: 10px;
 }
 
-.room-chat-info-control {
+.chat-info-data > div:nth-child(2)
+{
+  font-family: Roboto, regular;
+}
+
+.chat-info-user-photo
+{
+  margin-top: 10px;
+  margin-left: 30px;
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+}
+
+.chat-info-user-photo img
+{
+  height: 100%;
+  width: 100%;
+  border-radius: 100px;
+}
+
+.chat-info-stats
+{
+  float: right;
+  width: 260px;
+  padding-right: 20px;
+  padding-left: 20px;
   display: grid;
-  height: auto;
+  text-align: start;
+  grid-gap: 5px;
 }
 
-.room-chat-info-control > button {
-  height: 50px;
+.chat-info-images
+{
+  height: calc(100% - 350px);
 }
 
-.room-chat-info-control > button span {
-  font-size: 15px;
-  margin-right: 50px;
-}
-
-.room-chat-info-control > button img, .room-chat-info-control > button i {
-  float: left;
-  margin-left: 10px;
-}
-
-.room-chat-info-control > button img {
-  height: 25px;
-  width: 25px;
-}
-
-.room-chat-info-files {
-  display: grid;
-  grid-template-columns: repeat(3, 50px);
-  grid-template-rows: max-content;
-  height: calc(100% - 400px);
-}
-
-.room-chat-info-files > div {
-  width: fit-content;
+.chat-info-images > div:first-child
+{
+  text-align: center;
+  width: min-content;
+  height: min-content;
+  margin: 50% auto auto;
 }

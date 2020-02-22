@@ -13,17 +13,15 @@ import { LeftPanelComponentContext } from "../../util/LeftPanelComponentContext"
 
 import "./list-user-component.css";
 
-type IProps = { data : User };
-
 type IState = {
 	data : User
 	selected : boolean
 };
 
-export default class ListUserComponent extends Component<IProps>
+export default class ListUserComponent extends Component<User>
 {
 	state : IState = {
-		data : this.props.data,
+		data : this.props,
 		selected : false
 	};
 
@@ -65,7 +63,7 @@ export default class ListUserComponent extends Component<IProps>
 
 				!room && Profile.addRoom(this.room);
 
-				RoomContextHelpers.changeRoom({
+				await RoomContextHelpers.changeRoom({
 					data: this.room,
 					user: this.state.data,
 					stats: undefined // TODO: get stats from backend
@@ -80,17 +78,12 @@ export default class ListUserComponent extends Component<IProps>
 				<div className="list-user-focus"/>
 				<div className="list-user-info">
 					<div className="list-user-photo">
-						<img src={`http://localhost:8080/image/get?id=${this.props.data.profileImage?.id}`} alt=""/>
+						<img src={`http://localhost:8080/image/get?id=${this.props.profileImage?.id}`} alt=""/>
 					</div>
 					<div>
 						<div className="list-user-nick">
 							<span style={{ color : this.state.selected ? "white" : "#a9a9a9", fontSize : 15 }}>
 								{this.state.data.nick}
-							</span>
-						</div>
-						<div className="list-user-last-message">
-							<span style={{ color : "gray", fontSize : 13, marginLeft : 5 }}>
-								Last message
 							</span>
 						</div>
 					</div>

@@ -6,11 +6,9 @@ import { Message } from "../../model/Message";
 
 import "./message-component.css";
 
-type IProps = { data : Message };
-
 type IState = { time : Date };
 
-export default class MessageComponent extends Component<IProps, IState>
+export default class MessageComponent extends Component<Message, IState>
 {
   state : IState = { time : new Date(0) };
 
@@ -18,14 +16,14 @@ export default class MessageComponent extends Component<IProps, IState>
 
   UNSAFE_componentWillMount = () =>
   {
-    this.fromProfile = Profile.profileContext?.profile.id === this.props.data.author.id;
+    this.fromProfile = Profile.profileContext?.profile.id === this.props.author.id;
   };
 
   componentDidMount = () =>
   {
     const date = new Date(0);
 
-    date.setUTCSeconds(this.props.data.time);
+    date.setUTCSeconds(this.props.time);
 
     this.setState({ time : date });
   };
@@ -35,14 +33,15 @@ export default class MessageComponent extends Component<IProps, IState>
     if (this.fromProfile)
     {
       return {
-        background : "#858AE3",
-        borderBottomRightRadius : 0,
+        background : "#EFEFEF",
+        boxShadow: "0px 5px 6px -2px rgba(0,0,0,0.25)",
+	      color : "#323232",
         marginLeft : "auto"
       };
     }
     return {
-      background : "#181818",
-      borderBottomLeftRadius: 0,
+      background : "#323232",
+      boxShadow : "0 5px 14px -6px rgba(0,0,0,0.75)",
       animationName : "chat-message-left"
     };
   };
@@ -50,7 +49,7 @@ export default class MessageComponent extends Component<IProps, IState>
   textDiv = (style : CSSProperties = { wordBreak : "break-all" }) =>
   (
     <div style={style}>
-      <span>{this.props.data.text}</span>
+      <span>{this.props.text}</span>
     </div>
   );
 
@@ -64,7 +63,7 @@ export default class MessageComponent extends Component<IProps, IState>
   render = () => (
     <div
       className="message-div"
-      id={`message-${this.props.data.id}`}
+      id={`message-${this.props.id}`}
       style={this.messageStyle()}
     >
       {

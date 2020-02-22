@@ -1,25 +1,31 @@
-.left-panel {
-	width: 250px;
-	height: 100%;
+.left-panel
+{
+	width: 280px;
+	height: 99%;
+	box-shadow: 0 6px 20px -3px rgba(0, 0, 0, 0.75);
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
 	background: #171717;
 }
 
-.people-pane {
+.people-pane
+{
 	padding: 5px;
 	display: grid;
-	grid-auto-rows: 50px;
+	grid-auto-rows: 45px;
 	overflow-y: auto;
-	height: calc(100% - 70px);
+	height: 80%;
 }
 
-.left-panel-control-buttons {
+.left-panel-control-buttons
+{
 	margin-top: auto;
 	height: 50px;
-	padding: 5px;
-	padding-left: 10px;
+	padding: 5px 5px 5px 10px;
 }
 
-.left-panel-control-buttons button {
+.left-panel-control-buttons button
+{
 	background: #181818;
 	border-radius: 100px;
 	height: 40px;
@@ -29,12 +35,67 @@
 	margin-left: 5px;
 }
 
-.left-panel-control-buttons > div {
+.left-panel-control-buttons > div
+{
 	margin-top: 10px;
 }
 
-.left-panel-control-buttons button > i {
+.left-panel-control-buttons button > i
+{
 	line-height: 25px;
 	font-size: 20px;
 	color: #35CE8D;
+}
+
+.left-panel-search
+{
+	display: flex;
+	height: 100px;
+}
+
+.left-panel-search > div:first-child
+{
+	display: flex;
+	margin: auto;
+	width: 85%;
+	height: 30px;
+}
+
+#left-panel-search-icon
+{
+	width: 30px;
+	height: 30px;
+	border-radius: 100px;
+	background: #323232;
+}
+
+#left-panel-search-input
+{
+	margin-left: auto;
+	width: 80%;
+	height: 100%;
+	line-height: 33px;
+}
+
+#left-panel-search-input input
+{
+	width: 88%;
+	background: #323232;
+	color: white;
+	border-radius: 100px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.left-panel-footer
+{
+	height: calc(100% - 80% - 110px);
+}
+
+.left-panel-footer > div:first-child
+{
+	width: 50px;
+	height: 50px;
+  margin: auto;
+	line-height: 60px;
 }

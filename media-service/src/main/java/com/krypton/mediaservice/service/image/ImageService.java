@@ -10,6 +10,7 @@ import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ public class ImageService
 {
   private final FileService fileService;
   private final ImageFeignClient imageFeignClient;
+  private final ImageProcessor imageProcessor;
 
   public Mono<Image> save(Mono<FilePart> file, String dir)
   {
@@ -30,6 +32,28 @@ public class ImageService
       var fileData = fileService.saveFilePart(f, path);
 
       return Mono.justOrEmpty(fileData.flatMap(data -> imageFeignClient.save(new Image(data))));
+    });
+  }
+
+  public Mono<Image> saveAsProfilePicture(Mono<FilePart> file, String dir)
+  {
+    return file.flatMap(f ->
+    {
+      var path = dir + "/" + f.filename();
+      var fileData = fileService.saveFilePart(f, path);
+
+      return Mono.justOrEmpty(fileData.flatMap(data ->
+      {
+        // if image is not gif we resize it
+        if (imageProcessor.getExtension(data.getName())
+                .map(extension -> !extension.equals("gif"))
+                .get())
+        {
+          // crop image as square as profile picture should be
+          imageProcessor.cropSquareCenter(new File(data.getPath()));
+        }
+        return imageFeignClient.save(new Image(data));
+      }));
     });
   }
 
@@ -43,26 +67,15 @@ public class ImageService
       {
         var path = Path.of(image.get().getPath());
         var bytes = Files.readAllBytes(path);
-        var extension = getExtension(image.get().getName());
 
-        if (extension.isPresent())
-        {
-          return ResponseEntity.ok()
-                  .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
-                  .body(bytes);
-        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
+                .body(bytes);
       } catch (IOException e)
       {
         e.printStackTrace();
       }
     }
     return ResponseEntity.of(Optional.empty());
-  }
-
-  private Optional<String> getExtension(String filename)
-  {
-    return Optional.ofNullable(filename)
-            .filter(f -> f.contains("."))
-            .map(f -> f.substring(filename.lastIndexOf(".") + 1));
   }
 }

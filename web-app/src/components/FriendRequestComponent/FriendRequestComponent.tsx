@@ -6,11 +6,11 @@ import { FriendRequestClient } from "../../api/FriendRequestClient";
 
 import { ProfileDataUpdater } from "../../helpers/ProfileDataUpdater";
 
+import { Link } from "react-router-dom";
+
 import "./friend-request-component.css";
 
-type IProps = {
-  request : FriendRequest
-};
+type IProps = { request : FriendRequest };
 
 export const FriendRequestComponent : FC<IProps> = props =>
 {
@@ -26,11 +26,16 @@ export const FriendRequestComponent : FC<IProps> = props =>
       .then(() => ProfileDataUpdater.getInstance().refreshFriendRequestsList(props.request.to.id));
   }
 
+  const name = (name : string) =>
+  {
+    return name.length > 32 ? `${name.substring(0, 33)}...` : name;
+  };
+
   return (
     <div className="friend-request">
-      <div>
-        <span>{props.request.text}</span>
-      </div>
+      <Link to={`/chat/user/info?id=${props.request.from.id}`}>
+        <span>{name(props.request.text)}</span>
+      </Link>
       <div id="friend-request-control-buttons">
         <button onClick={acceptRequest}>
           <i className="fas fa-check"/>

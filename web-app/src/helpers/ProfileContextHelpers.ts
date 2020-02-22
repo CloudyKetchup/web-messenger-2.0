@@ -233,4 +233,9 @@ export class ProfileContextHelpers
   {
     return ProfileContextHelpers.profileContext?.friends.find(f => f.id === friend.id) !== undefined;
   };
+
+  static searchFriends = (nick : string) : User[] | undefined =>
+  {
+    return ProfileContextHelpers.profileContext?.friends.filter(f => f.nick.includes(nick));
+  };
 }

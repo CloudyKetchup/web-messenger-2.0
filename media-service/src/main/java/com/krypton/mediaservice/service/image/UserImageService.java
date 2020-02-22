@@ -15,6 +15,6 @@ public class UserImageService
 
   public Mono<Image> saveProfilePicture(Mono<FilePart> filePart, String id)
   {
-    return imageService.save(filePart, StorageConfig.IMAGES_PATH + "/" + id);
+    return imageService.saveAsProfilePicture(filePart, StorageConfig.IMAGES_PATH + "/" + id);
   }
 }
