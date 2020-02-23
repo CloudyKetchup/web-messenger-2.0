@@ -1,5 +1,6 @@
 .notification
 {
+  top: 5px;
   background: white;
   height: 50px;
   padding: 0 10px 0;
