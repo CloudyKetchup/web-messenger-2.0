@@ -2,38 +2,40 @@
 {
   height: 50px;
   display: flex;
+  padding: 10px;
 }
 
 .search-user-picture
 {
   background: white;
   height: 40px;
-  width: 75px;
+  width: 40px;
   border-radius: 100px;
   margin-top: 5px;
   margin-left: 10px;
 }
 
+.search-user-picture img
+{
+  height: 100%;
+  width: 100%;
+  border-radius: 100px;
+}
+
 .search-user-nick, .search-user-status-quote
 {
+  margin-left: 10px;
   color: white;
   line-height: 40px;
   padding: 5px 10px;
 }
 
-.search-user-status-quote
-{
-  color: gray;
-  text-align: center;
-  width: -webkit-fill-available;
-}
-
 .search-user-friend-request-button
 {
   border-radius: 2px;
-  width: 90px;
+  width: 50px;
   height: 30px;
-  margin-right: 10px;
+  margin-left: auto;
   margin-top: 10px;
 }
 
