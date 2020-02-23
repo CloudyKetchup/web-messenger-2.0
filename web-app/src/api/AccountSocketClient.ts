@@ -11,6 +11,8 @@ import { FriendRequest }              from "../model/request/FriendRequest";
 import { FriendRequestNotification }  from "../model/notification/FriendRequestNotification";
 import { NotificationType }           from "../model/notification/Notification";
 
+import { GLOBAL_URL } from "./ApiConfig";
+
 import * as UUID from "../util/uuid/UUIDTools";
 
 export class AccountSocketClient
@@ -20,7 +22,7 @@ export class AccountSocketClient
 
   constructor()
   {
-    this.stomp = Stomp.client("ws://localhost:8300/user-service/socket");
+    this.stomp = Stomp.client(`ws://${GLOBAL_URL}/account/user-service/socket`);
   }
 
   static getInstance = () : AccountSocketClient =>

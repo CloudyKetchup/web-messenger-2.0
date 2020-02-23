@@ -1,0 +1,1 @@
+export const GLOBAL_URL = "localhost:8080";

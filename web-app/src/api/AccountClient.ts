@@ -6,7 +6,9 @@ import { Room } from "../model/Room";
 import { FriendRequest } from "../model/request/FriendRequest";
 import { Status } from "../model/Status";
 
-const URL = "http://localhost:8080/account";
+import { GLOBAL_URL } from "./ApiConfig";
+
+const URL = `http://${GLOBAL_URL}/account`;
 
 export class AccountClient
 {

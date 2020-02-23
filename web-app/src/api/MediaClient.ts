@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { Image } from "../model/media/Image";
 
-const URL = "http://localhost:8080";
+import { GLOBAL_URL } from "./ApiConfig";
 
 export class MediaClient
 {
@@ -14,7 +14,7 @@ export class MediaClient
 
     return axios({
       method  : "POST",
-      url     : `${URL}/image/save/profile?id=${id}`,
+      url     : `${GLOBAL_URL}/image/save/profile?id=${id}`,
       data    : formData,
       headers: { 'Content-Type': 'multipart/form-data' }
     })

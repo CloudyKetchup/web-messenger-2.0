@@ -1,6 +1,7 @@
-import { Room }    from "../model/Room";
-import { Message } from "../model/Message";
-import { ChatMessageNotification } from "../model/notification/ChatMessageNotification ";
+import { Room }                     from "../model/Room";
+import { Message }                  from "../model/Message";
+import { ChatMessageNotification }  from "../model/notification/ChatMessageNotification ";
+import { NotificationType }         from "../model/notification/Notification";
 
 import { RoomContextHelpers } from "../helpers/RoomContextHelpers";
 import { ProfileContextHelpers as Profile } from "../helpers/ProfileContextHelpers";
@@ -8,8 +9,9 @@ import { NotificationContextHelpers } from "../helpers/NotificationContextHelper
 
 import { Stomp, CompatClient } from "@stomp/stompjs";
 
+import { GLOBAL_URL } from "./ApiConfig";
+
 import * as UUID from "../util/uuid/UUIDTools";
-import { NotificationType } from "../model/notification/Notification";
 
 export type MessageBody = {
 	text      : string
@@ -21,11 +23,10 @@ export class MessagingClient
 {
 	private static instance : MessagingClient;
 	private stomp : CompatClient;
-	private URL = "localhost:8080";
 
 	constructor()
 	{
-		this.stomp = Stomp.client(`ws://${this.URL}/room/socket/messaging`);
+		this.stomp = Stomp.client(`ws://${GLOBAL_URL}/room/socket/messaging`);
 	}
 
 	static getInstance = () : MessagingClient =>

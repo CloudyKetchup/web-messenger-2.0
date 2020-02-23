@@ -41,8 +41,8 @@ export class NotificationTimerLine extends Component<IProps, IState>
       bottom    : 0,
       left      : 0,
       width     : `${this.state.progress}%`,
-      height    : 4,
-      background: "red",
+      height    : 5,
+      background: "#35CE8D",
       borderBottomLeftRadius: 2,
       borderBottomRightRadius: 2
     }}>
