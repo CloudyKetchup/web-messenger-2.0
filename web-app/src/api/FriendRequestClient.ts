@@ -2,7 +2,9 @@ import axios from "axios";
 
 import { User } from "../model/User";
 
-const URL = "http://localhost:8080/account/request";
+import { GLOBAL_URL} from "./ApiConfig";
+
+const URL = `http://${GLOBAL_URL}/account/request`;
 
 export class FriendRequestClient
 {

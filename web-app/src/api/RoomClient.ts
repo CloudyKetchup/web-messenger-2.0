@@ -2,7 +2,9 @@ import axios from "axios";
 
 import { Message } from "../model/Message";
 
-const URL = "http://localhost:8080/room";
+import { GLOBAL_URL } from "./ApiConfig";
+
+const URL = `http://${GLOBAL_URL}/room`;
 
 export class RoomClient
 {
