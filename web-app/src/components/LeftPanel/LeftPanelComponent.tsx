@@ -1,37 +1,29 @@
-import React, {ChangeEventHandler, Component} from "react";
+import React, { Component } from "react";
 
-import { Link, match } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import ListUserComponent from "../ListUserComponent/ListUserComponent";
 
-import { LeftPanelComponentContext } from "../../util/LeftPanelComponentContext";
-
 import { User } from "../../model/User";
+
+import { LeftPanelComponentContext } from "../../util/LeftPanelComponentContext";
+import { ProfileContextHelpers } from "../../helpers/ProfileContextHelpers";
 
 import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
 
 import "./left-panel-component.css";
-import {ProfileContextHelpers} from "../../helpers/ProfileContextHelpers";
 
-type IProps = {
-	friends : User[]
-	match : match
-};
+type ICommon = { friends : User[] };
 
-type IState = { friends : User[] };
-
-export default class LeftPanelComponent extends Component<IProps>
+export default class LeftPanelComponent extends Component<ICommon, ICommon>
 {
-	state : IState = {
+	state : ICommon = {
 		friends : this.props.friends
 	};
 
 	searchInput : HTMLInputElement | null = null;
 
-	componentDidMount = () =>
-	{
-		LeftPanelComponentContext.getInstance().registerComponent(this);
-	};
+	componentDidMount = () => LeftPanelComponentContext.getInstance().registerComponent(this);
 
 	searchUser = async () =>
 	{
@@ -63,7 +55,12 @@ export default class LeftPanelComponent extends Component<IProps>
 							<SearchIcon style={{ fill : "gray", height : "100%", width : "100%" }}/>
 						</div>
 						<div id="left-panel-search-input">
-							<input onChange={this.searchUser} placeholder="search" id="friends-search-input"/>
+							<input
+                onChange={this.searchUser}
+                placeholder="search"
+                id="friends-search-input"
+                autoComplete="off"
+              />
 						</div>
 					</div>
 				</div>
