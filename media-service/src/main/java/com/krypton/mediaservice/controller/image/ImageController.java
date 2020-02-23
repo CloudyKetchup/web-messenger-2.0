@@ -26,6 +26,10 @@ public class ImageController
   @GetMapping("/get")
   public ResponseEntity<byte[]> getImage(@RequestParam String id)
   {
-    return imageService.getImageAsByteArray(id);
+    if (!id.isBlank() && !id.equals("undefined"))
+    {
+      return imageService.getImageAsByteArray(id);
+    }
+    return ResponseEntity.badRequest().build();
   }
 }
