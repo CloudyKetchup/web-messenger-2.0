@@ -32,7 +32,7 @@ export default class RoomChatComponent extends Component<IProps, IState>
 	state : IState = {
 		room					: this.props.room,
 		choosenImages : null,
-		typing				: true,
+		typing				: false,
 		messages			: this.props.room.data?.messages || []
 	};
 
@@ -139,9 +139,9 @@ export default class RoomChatComponent extends Component<IProps, IState>
 						this.state.typing
 						&&
             <span style={{
-							marginLeft: 10,
-							marginRight : "auto",
-							color : "grey"
+							marginLeft   : 10,
+							marginRight  : "auto",
+							color        : "grey"
 						}}>typing...</span>
 					}
 				</div>
@@ -167,11 +167,18 @@ export default class RoomChatComponent extends Component<IProps, IState>
 						}}
 						multiple/>
 					<button onClick={this.chooseImages}>
-						<img style={{ height : 20 }} src={PlusIcon} alt="..."/>
+						<img
+              style={{ height : 20 }}
+              src={PlusIcon}
+              alt=""
+            />
 					</button>
 					<input id={`room-${this.state.room.data?.id}-input`} placeholder="Your message..."/>
 					<button onClick={this.sendMessage}>
-						<img style={{ height : 35 }} src={SendIcon} alt="..."/>
+						<img
+              style={{ height : 35 }}
+              src={SendIcon}
+              alt=""/>
 					</button>
 				</div>
 			</div>
