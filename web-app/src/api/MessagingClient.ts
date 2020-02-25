@@ -26,7 +26,7 @@ export class MessagingClient
 
 	constructor()
 	{
-		this.stomp = Stomp.client(`ws://${GLOBAL_URL}/room/socket/messaging`);
+		this.stomp = Stomp.client(`ws${GLOBAL_URL}/room/socket/messaging`);
 	}
 
 	static getInstance = () : MessagingClient =>

@@ -1,1 +1,1 @@
-export const GLOBAL_URL = "localhost:8080";
+export const GLOBAL_URL = process.env.REACT_APP_API_BASE_URL || '://localhost:8080';
