@@ -22,7 +22,7 @@ export class AccountSocketClient
 
   constructor()
   {
-    this.stomp = Stomp.client(`ws://${GLOBAL_URL}/account/user-service/socket`);
+    this.stomp = Stomp.client(`ws${GLOBAL_URL}/account/user-service/socket`);
   }
 
   static getInstance = () : AccountSocketClient =>

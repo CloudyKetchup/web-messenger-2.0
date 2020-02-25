@@ -4,7 +4,7 @@ import { User } from "../model/User";
 
 import { GLOBAL_URL} from "./ApiConfig";
 
-const URL = `http://${GLOBAL_URL}/account/request`;
+const URL = `http${GLOBAL_URL}/account/request`;
 
 export class FriendRequestClient
 {

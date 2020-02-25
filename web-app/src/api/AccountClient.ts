@@ -8,7 +8,7 @@ import { Status } from "../model/Status";
 
 import { GLOBAL_URL } from "./ApiConfig";
 
-const URL = `http://${GLOBAL_URL}/account`;
+const URL = `http${GLOBAL_URL}/account`;
 
 export class AccountClient
 {

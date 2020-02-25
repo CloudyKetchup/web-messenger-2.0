@@ -4,7 +4,7 @@ import { Message } from "../model/Message";
 
 import { GLOBAL_URL } from "./ApiConfig";
 
-const URL = `http://${GLOBAL_URL}/room`;
+const URL = `http${GLOBAL_URL}/room`;
 
 export class RoomClient
 {

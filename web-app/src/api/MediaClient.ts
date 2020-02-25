@@ -14,7 +14,7 @@ export class MediaClient
 
     return axios({
       method  : "POST",
-      url     : `${GLOBAL_URL}/image/save/profile?id=${id}`,
+      url     : `http${GLOBAL_URL}/image/save/profile?id=${id}`,
       data    : formData,
       headers: { 'Content-Type': 'multipart/form-data' }
     })
