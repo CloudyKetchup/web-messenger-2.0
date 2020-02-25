@@ -1,0 +1,131 @@
+version: '3'
+services:
+  # database (postgresql)
+  db:
+    container_name: postgres_db
+    image: postgres
+    env_file:
+      - database.env
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    networks:
+      - database
+    ports:
+      - 5432:5432
+
+  # eureka server
+  eureka-server:
+    container_name: eureka_server
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8761:8761
+
+  # gateway service
+  gateway:
+    container_name: gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+      - gateway
+    ports:
+      - 8080:8080
+
+  # account service
+  account-service:
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+    ports:
+      - 8300:8300
+
+  # database service
+  database-service:
+    build:
+      context: ./database-service
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/web_messenger
+      SPRING_DATASOURCE_USERNAME: krypton
+      SPRING_DATASOURCE_PASSWORD: 1708
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+      - database
+    ports:
+      - 8200:8200
+
+  # media service
+  media-service:
+    build:
+      context: ./media-service
+      dockerfile: Dockerfile
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+    ports:
+      - 8500:8500
+
+  # room service
+  room-service:
+    build:
+      context: ./room-service
+      dockerfile: Dockerfile
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+    ports:
+      - 8100:8100
+  # react app
+  web-app:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile
+    depends_on:
+      - gateway
+    environment:
+      REACT_APP_API_BASE_URL: ://gateway:8080
+    networks:
+      - gateway
+#    volumes:
+#      - '.:/app'
+#      - '/app/node_modules'
+#    environment:
+#      - NODE_ENV=development
+    ports:
+      - 80:80
+
+networks:
+  gateway:
+    driver: bridge
+  backend:
+    driver: bridge
+  database:
+    driver: bridge
+
+volumes:
+  database-data:
