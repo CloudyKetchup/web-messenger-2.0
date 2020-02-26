@@ -1,18 +1,22 @@
-* {
+*
+{
   margin: 0px;
   padding: 0px;
 }
 
-body {
+body
+{
   font-family: 'Exo', sans-serif;
 }
 
-.login-window {
+.login-window
+{
   height: 100%;
   width: 100%;
 }
 
-.form-pane {
+.form-pane
+{
   padding: 20px;
   padding-top: 30px;
   height: fit-content;
@@ -29,19 +33,29 @@ body {
   right: 0;
 }
 
-.form-pane-header {
+.form-pane-header
+{
+  font-family: Roboto, regular;
   display: grid;
   grid-gap: 20px;
 }
 
-.form-pane-header div:first-child {
+.form-pane-header div:first-child
+{
+  text-align: center;
+  font-size: 20px;
+}
+
+.form-pane-header div:nth-child(2)
+{
   margin: auto;
   height: 150px;
   width: 150px;
   border-radius: 100px;
 }
 
-.form-pane-header div i {
+.form-pane-header div i
+{
   display: none;
   position: absolute;
   z-index: 999;
@@ -51,53 +65,59 @@ body {
   font-size: 45px;
 }
 
-.form-pane-header img {
-  border: 2px solid red;
+.form-pane-header img
+{
   object-fit: cover;
   height: 100%;
   width: 100%;
   border-radius: 100px;
 }
 
-.form-pane-header-inputs {
+.form-pane-header-inputs
+{
   display: grid;
   grid-auto-rows: 40px;
   grid-gap: 5px;
 }
 
-.form-pane-header input {
+.form-pane-header input
+{
   padding-top: 20px;
   width: 300px;
   margin: auto;
   border-bottom: 1px solid #a9a9a9;
 }
 
-.form-pane-header input:focus {
+.form-pane-header input:focus
+{
   border-bottom: 2px solid #6C6EA0;
 }
 
-.form-pane-footer {
+.form-pane-footer
+{
   justify-content: center;
   display: grid;
   grid-auto-columns: 200px;
   grid-auto-rows: 50px;
-  grid-gap: 70px;
   text-align: center;
-  height: 215px;
+  height: 115px;
   margin: auto;
   padding-top: 60px;
 }
 
-.form-pane-footer > * {
+.form-pane-footer > *
+{
   margin: auto;
 }
 
-.form-pane-footer a {
+.form-pane-footer a
+{
   outline: none;
   color: gray;
 }
 
-.form-pane-footer a:first-child {
+.form-pane-footer a:first-child
+{
   line-height: 55px;
   margin-top: 30px;
   height: 50px;
@@ -106,4 +126,3 @@ body {
   background: #171717;
   color: white;
 }
-

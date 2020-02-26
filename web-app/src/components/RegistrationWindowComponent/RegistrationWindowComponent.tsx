@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
+
+import { User } from "../../model/User";
 
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
 
@@ -9,18 +11,23 @@ import { History } from "history";
 
 import * as CookieManager from "../../util/cookie/CookieManager";
 
-import "../../css/animated-squares.css";
-import { User } from "../../model/User";
+import { AuthPageComponent, AuthPageState } from "../AuthPageComponent/AuthPageComponent";
+import { AuthPageAlerts } from "../AuthPageComponent/AuthPageAlerts";
 
-type IState = {
+import "../../css/animated-squares.css";
+
+interface IProps { history : History }
+
+interface IState extends AuthPageState {
   profilePictureURL : string
   profilePictureFile : File | null
-};
+}
 
-export class RegistrationWindowComponent extends Component<{ history : History }, IState>
+export class RegistrationWindowComponent extends AuthPageComponent<IProps, IState>
 {
   state : IState = {
-    profilePictureURL : "https://www.xda-developers.com/files/2019/09/OP7T_1_4k.jpg",
+    snackbars : [],
+    profilePictureURL : "https://images.vexels.com/media/users/3/137479/isolated/preview/19939e8d7a742bbfac2f5519108e216e-mountain-climbing-hiking-snow-by-vexels.png",
     profilePictureFile : null
   };
 
@@ -47,13 +54,13 @@ export class RegistrationWindowComponent extends Component<{ history : History }
     this.pictureOverlay && this.pictureOverlay.removeEventListener("mouseout", this.pictureMouseOut);
   };
 
-  private pictureMouseOver = () =>
+  private pictureMouseOver = async () =>
   {
-    this.pictureMouseEvent("#00000040", this.pictureOverlay);
+    this.pictureMouseEvent("#fafafa99", this.pictureOverlay);
     this.pictureIconMouseEvent("block", this.pictureIcon);
   };
 
-  private pictureMouseOut = () =>
+  private pictureMouseOut = async () =>
   {
     this.pictureMouseEvent("unset", this.pictureOverlay);
     this.pictureIconMouseEvent("none", this.pictureIcon);
@@ -62,12 +69,12 @@ export class RegistrationWindowComponent extends Component<{ history : History }
   private pictureMouseEvent = async (color : string, picture? : HTMLElement) =>
   {
     if (picture) picture.style.background = color;
-  }
+  };
 
   private pictureIconMouseEvent = async (display : string, icon? : HTMLElement) =>
   {
     if (icon) icon.style.display = display;
-  }
+  };
 
   private triggerImageChooser = async () =>
   {
@@ -75,7 +82,7 @@ export class RegistrationWindowComponent extends Component<{ history : History }
       this.pictureChooser = document.getElementById("choose-profile-picture") as HTMLInputElement || undefined;
 
     this.pictureChooser && this.pictureChooser.click();
-  }
+  };
 
   swapPicture = async () =>
   {
@@ -85,13 +92,13 @@ export class RegistrationWindowComponent extends Component<{ history : History }
 
       if (pictureFile)
       {
-        this.setState({ profilePictureFile : pictureFile[0] });
-        
+        this.setState({ profilePictureFile : pictureFile[0] } as IState);
+
         const fr = new FileReader();
 
         fr.onload = e =>
         {
-          this.setState({ profilePictureURL : e.target?.result as string });
+          this.setState({ profilePictureURL : e.target?.result as string } as IState);
         };
         fr.readAsDataURL(pictureFile[0]);
       }
@@ -108,17 +115,17 @@ export class RegistrationWindowComponent extends Component<{ history : History }
     {
       const result = AccountClient.register(nickInput.value, emailInput.value, passwordInput.value);
 
-      Profile.createBasedOnAuth(
+      await Profile.createBasedOnAuth(
         await result,
-        result =>
-        {
-          console.log("not registered", result);
-        },
+        result => this.errorAlert(result?.message),
         async account =>
         {
           CookieManager.saveCredentials(emailInput.value, passwordInput.value);
 
-          await this.setProfilePicture(await account, () => console.log("error"), () => this.props.history.push("/chat"));
+          await this.setProfilePicture(
+            account,
+            this.errorAlert,
+            () => this.props.history.push("/chat"));
         });
     }
   };
@@ -137,21 +144,32 @@ export class RegistrationWindowComponent extends Component<{ history : History }
       }
     }
   };
-  
+
   render = () => (
     <div className="registration-window">
       <div className="area" >
         <div className="form-pane" style={{ maxHeight : 450 }}>
           <div className="form-pane-header">
+            <div>
+              <span>Register</span>
+            </div>
             <div style={{ position : "relative" }}>
               <div
                 id="profile-picture-overlay"
-                style={{ position : "absolute", zIndex : 99, cursor : "pointer", textAlign : "center" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 100,
+                  position : "absolute",
+                  zIndex : 99,
+                  cursor : "pointer",
+                  textAlign : "center"
+                }}
                 onClick={this.triggerImageChooser}
               >
-                <i id="profile-picture-icon" className="fas fa-image"/> 
+                <i style={{ color : "black" }} id="profile-picture-icon" className="fas fa-image"/>
               </div>
-              <img id="profile-picture" src={this.state.profilePictureURL} alt="..."/>
+              <img id="profile-picture" src={this.state.profilePictureURL} alt=""/>
             </div>
             <div className="form-pane-header-inputs">
               <input id="registration-email-input" placeholder="Email" type="email"/>
@@ -159,29 +177,30 @@ export class RegistrationWindowComponent extends Component<{ history : History }
               <input id="registration-password-input" placeholder="Password" type="password"/>
             </div>
           </div>
-          <div className="form-pane-footer">
+          <div className="form-pane-footer" style={{ height : 300 }}>
             <button onClick={this.register}><i className="fas fa-check"/></button>
           </div>
         </div>
         <ul className="circles">
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
         </ul>
       </div>
+      <AuthPageAlerts alerts={this.state.snackbars} onClose={alert => this.removeAlert(alert.id)}/>
       <input
         id="choose-profile-picture"
         onChange={this.swapPicture}
-        style={{ display : "nonoe" }}
+        style={{ display : "none" }}
         type="file"
         accept="image/*"/>
     </div>
   );
-};
+}
