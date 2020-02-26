@@ -1,48 +1,57 @@
-import React, { FC } from "react";
+import React from "react";
 
 import { Link } from "react-router-dom";
+
+import { History } from "history";
 
 import { ProfileContextHelpers as Profile } from "../../helpers/ProfileContextHelpers";
 
 import { AccountClient }  from "../../api/AccountClient";
 
-import { History } from "history";
-
 import * as CookieManager from "../../util/cookie/CookieManager";
+
+import { AuthPageComponent, AuthPageState } from "../AuthPageComponent/AuthPageComponent";
+import { AuthPageAlerts } from "../AuthPageComponent/AuthPageAlerts";
+
+import { ReactComponent as UserIcon } from "../../assets/user-2.svg";
 
 import "./login-window-component.css";
 import "../../css/animated-squares.css";
 
-export const LoginWindowComponent : FC<{ history : History }> = props =>
+interface IProps { history : History }
+
+interface IState extends AuthPageState {}
+
+export class LoginWindowComponent extends AuthPageComponent<IProps, IState>
 {
-  const loginOnClick = async () =>
+  loginOnClick = async () =>
   {
     const emailInput    = document.getElementById("login-email-input") as HTMLInputElement;
     const passwordInput = document.getElementById("login-password-input") as HTMLInputElement;
 
-    emailInput && passwordInput && login(emailInput.value, passwordInput.value);
-  }
+    emailInput && passwordInput && this.login(emailInput.value, passwordInput.value);
+  };
 
-  const login = async (email : string, password : string) =>
+  login = async (email : string, password : string) =>
   {
     const result = AccountClient.login(email, password);
 
-    Profile.createBasedOnAuth(
+    await Profile.createBasedOnAuth(
       await result,
-      result =>
-      {
-        console.log("not logged in", result);
-      },
-			() => { CookieManager.saveCredentials(email, password); props.history.push("/chat"); });
+      result => this.errorAlert(result?.message),
+			() => { CookieManager.saveCredentials(email, password); this.props.history.push("/chat"); });
   };
 
-  return (
+  render = () => (
     <div className="login-window">
       <div className="area" >
         <div className="form-pane">
           <div className="form-pane-header">
             <div>
-              <img src="https://www.xda-developers.com/files/2019/09/OP7T_1_4k.jpg" alt="..."/>
+              <span>Login</span>
+            </div>
+            <div style={{ textAlign : "center" }}>
+              <UserIcon fill="gray" style={{ height : "90%", width : "90%" }}/>
             </div>
             <div className="form-pane-header-inputs">
               <input id="login-email-input" placeholder="Email" type="email"/>
@@ -50,25 +59,30 @@ export const LoginWindowComponent : FC<{ history : History }> = props =>
             </div>
           </div>
           <div className="form-pane-footer">
-            <button onClick={loginOnClick}><i className="fas fa-check"/></button>
+            <button onClick={this.loginOnClick}><i className="fas fa-check"/></button>
             <Link to="/register">
               Register?
             </Link>
           </div>
         </div>
         <ul className="circles">
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
+          <li/>
         </ul>
-      </div >
+      </div>
+	    <AuthPageAlerts alerts={this.state.snackbars} onClose={alert => this.removeAlert(alert.id)}/>
     </div>
   );
 }
