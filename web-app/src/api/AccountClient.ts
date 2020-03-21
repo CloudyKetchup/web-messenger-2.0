@@ -12,60 +12,64 @@ const URL = `http${GLOBAL_URL}/account`;
 
 export class AccountClient
 {
+  private static fallback = (...args : any[]) : void | undefined => undefined;
+
+  static setFallback = (fallback : (...args : any[]) => void) => AccountClient.fallback = fallback;
+
   static login = (email : string, password : string) : Promise<AuthReponse> =>
   (
     axios.get(`${URL}/login?email=${email}&password=${password}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback)
   );
 
   static register = (nick : string, email : string, password : string) : Promise<AuthReponse> =>
   (
     axios.post(`${URL}/register?nick=${nick}&email=${email}&password=${password}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback || { status : "500", message : "error occurred" } as AuthReponse)
   );
 
   static findById = (id : string) : Promise<User | undefined> =>
   (
     axios.get(`${URL}/get?id=${id}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback)
   );
 
   static getFriends = (id : string) : Promise<User[]> =>
   (
     axios.get(`${URL}/get/friends?id=${id}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback || [])
   );
 
-  static getRooms = (id : string) : Promise<Room[]> => 
+  static getRooms = (id : string) : Promise<Room[]> =>
   (
     axios.get(`${URL}/get/rooms?id=${id}`)
       .then(response => response.data)
-      .catch(e => { console.log(e); return [] })
+      .catch(AccountClient.fallback || [])
   );
 
   static getFriendRequests = (id : string) : Promise<FriendRequest[]> =>
   (
     axios.get(`${URL}/get/friend-requests?id=${id}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback || [])
   );
 
   static getFriendRoom = (id : string, friendId : string) : Promise<Room | null> =>
   (
     axios.get(`${URL}/get/room?userId=${id}&friendId=${friendId}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback || null)
   );
-  
+
   static setStatus = (id : string, status : Status) =>
   (
     axios.post(`${URL}/set/status?id=${id}&status=${status}`)
       .then(response => response.data)
-      .catch(console.log)
+      .catch(AccountClient.fallback)
   );
 
   static setProfilePicture = (id : string, imageId : string, fallback? : () => void) =>
