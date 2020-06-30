@@ -1,12 +1,21 @@
 # web-messenger-2.0
 
-A web based messenger build with reactjs+spring, first webchat was written with python and javascript, know I want to build something more complex with better functionality
+Web based messaging application build with ReactJS and Spring Framework
 
 ![alt text](images/Main.jpg)
 
-### Functionality
+Composed with a microservice architecture powered by Spring Cloud
 
- - search for people
- - send, accept and delete friend requests
- - send messages
- - search through friends list
+##### Frontend
+  - ReactJS
+##### Backend
+  - Spring Framework (Boot, Data, Cloud)
+##### Database
+  - PostgreSQL
+
+### Functionality
+  - login/register
+  - search for people
+  - send, accept and delete friend requests
+  - send messages
+  - search through friends list
